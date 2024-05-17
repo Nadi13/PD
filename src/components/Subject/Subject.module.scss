@@ -1,0 +1,57 @@
+@import 'src/myTools/colors.scss';
+@import 'src/myTools/size.scss';
+
+.container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 112px;
+
+    .content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 282px;
+        background-color:$color-subject;
+        padding-top: 15px;
+
+        select {
+            width: 157px;
+            height: 38px;
+            background-color: $color-background;
+
+            font-weight: $normal_font_weight;
+            font-size: $font_size_15;
+
+            border-radius: 6px;
+            border-width: 2px;
+            border-color: $color-border;
+
+            appearance: none;
+
+            background: url('src/assets/notification.png');
+
+            text-indent: 10px;
+        }
+
+        .textBlock {
+            display: flex;
+            flex-direction: column;
+         
+            gap: 25px;
+
+            .title {
+                margin: 0;
+            }
+
+            .text {
+                line-height: 32px;
+                margin: 0;
+            }
+        }
+    }
+}
