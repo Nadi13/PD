@@ -10,7 +10,9 @@ const strings = {
     Deferred: "Отложенные работы",
     Accepted: "Принятые работы",
     Rejected: "Отклоненные работы",
-    Choose: "Выберите предмет"
+    Choose: "Выберите предмет",
+    Mo211: "МО-211/1",
+    Group: "Группа"
 };
 
 export default strings;

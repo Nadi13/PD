@@ -1,0 +1,57 @@
+@import 'src/myTools/colors.scss';
+@import 'src/myTools/size.scss';
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    gap: 59px;
+
+    .form {
+        width: 240px;
+        height: 38px;
+        border-radius: 5px;
+        background-color: $color-search;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: left;
+    }
+
+    .input {
+        border: none;
+        outline: none;
+        flex: 1;
+
+        background-color: $color-search;
+    }
+
+    .img {
+        width: 18px;
+        height: 18px;
+        margin-left: 10px;
+    }
+
+    select {
+        width: 133px;
+        height: 38px;
+        
+        background-color: $color-group;
+        color: $color-navbar-not-selected;
+
+        font-weight: $normal_font_weight;
+        font-size: $font_size_15;
+
+        border-radius: 5px;
+        border-width: 1px;
+        border-color: $color-border;
+
+        text-indent: 10px;
+
+        outline: none;
+    }
+
+    .calendar {
+        
+    }
+}

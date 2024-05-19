@@ -13,8 +13,8 @@ const Header = () => {
                 </ul>
             </nav>
             <div className = {css.profile_block}>
-                <img className={css.img} src='src/assets/notification.png'></img>
                 <div className={css.circle}>{strings.K}</div>
+                <img className={css.img} src='src/assets/notification.png'></img>
             </div>
         </header>
     </>
