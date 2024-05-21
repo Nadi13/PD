@@ -1,0 +1,36 @@
+@import 'src/styles';
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 85px;
+
+    .elem {
+        font-size: 15;
+        font-weight: 400;
+        color: $color-topbar-not-selected;
+    }
+
+    .elem:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .selected {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 216px;
+        height: 53px;
+        border-radius: 6px;
+        background-color: $color-wrap-topbar-selected;
+
+        .selectedTypography {
+            color: $color-topbar-selected;
+            font-weight: 700;
+        }
+
+    }
+}

@@ -1,0 +1,112 @@
+@import 'src/styles';
+
+.container {
+    display: flex;
+    height: 120px;
+    width: 1088px;
+    border-radius: 6px;
+    padding-left: 25px;
+    padding-right: 36px;
+    padding-top: 24px;
+
+    .elements {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .icon {
+            display: flex;
+            gap: 12px;
+
+            .circleWrap {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 38px;
+                height: 38px;
+                border-radius: 50%;
+                background-color: $color-request-icon-back;
+                box-shadow: 0px 4px 4px $color-shadow;
+
+                .iconTypography {
+                    font-size: 20px;
+                    font-weight: 500;
+                }
+            }
+        }
+
+        .info1 {
+
+            display: flex;
+            flex-direction: column;
+            gap: 17px;
+            margin-left: 15px;
+
+            .name {
+                color: $color-request-name;
+                font-size: 20px;
+                font-weight: 500;
+            }
+
+            .work {
+                color: $color-work;
+                font-size: 20px;
+                font-weight: 700;
+                margin-top: 17px;
+            }
+
+        }
+
+        .info2 {
+
+            color: $color-number;
+            font-size: 20px;
+            font-weight: 500;
+            margin-left: 70px;
+
+            .highlight {
+                font-weight: 700;
+            }
+
+        }
+
+        .info3 {
+
+            display: flex;
+            flex-direction: column;
+            gap: 33px;
+            margin-left: 310px;
+            
+
+            .course {
+                color: $color-course;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .requestData {
+
+                display: flex;
+                flex-direction: row;
+                gap: 9px;
+
+
+                .text {
+                    align-self: flex-end;
+                    color: $color-request-text;
+                    font-size: 13px;
+                    font-weight: 500;
+                }
+
+                .data {
+                    align-self: flex-end;
+                    color: $color-request-data;
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+            }
+
+        }
+    }
+
+}

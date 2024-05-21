@@ -1,0 +1,14 @@
+@import 'src/styles';
+
+.wrap {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 282px;
+    height: 100%;
+    padding: 21px 0;
+    gap: 40px;
+    background-color: $color-request-panel
+
+}

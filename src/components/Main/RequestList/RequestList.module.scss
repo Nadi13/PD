@@ -1,0 +1,13 @@
+@import 'src/styles';
+
+.wrap {
+
+    display: flex;
+    flex-direction: column;
+    background-color: #F8F8FB;
+    justify-content: center;
+    padding: 24px;
+    gap: 30px;
+    align-items: center;
+    
+}

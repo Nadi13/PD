@@ -1,0 +1,48 @@
+@import 'src/styles';
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 112px;
+    width: 100%;
+    background-color: $color-back;
+
+    .elements {
+        width: 1345px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        
+        .notification {
+            width: 32px; 
+            height: 32px;
+        }
+
+        .icon {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 14px;
+
+            .circleWrap {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: $color-icon-back;
+                box-shadow: 0px 4px 4px $color-shadow;
+
+                .iconTypography {
+                    color: $color-icon-typography;
+                    font-size: 30px;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+}
