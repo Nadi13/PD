@@ -1,0 +1,14 @@
+@import 'src/myTools/colors.scss';
+@import 'src/myTools/size.scss';
+
+.content {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: left;
+        justify-content: top;
+        background-color: $color-content;
+        padding-top: 21px;
+        padding-left: 30px;
+        width: 100%;
+}

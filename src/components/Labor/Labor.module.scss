@@ -1,0 +1,65 @@
+@import 'src/myTools/colors.scss';
+@import 'src/myTools/size.scss';
+
+.labor {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    gap: 10px;
+
+    select {
+        width: 649px;
+        height: 38px;
+        
+        background-color: $color-background;
+        color: $color-navbar-not-selected;
+
+        font-weight: $normal_font_weight;
+        font-size: $font_size_15;
+
+        border-radius: 3px;
+        border-width: 2px;
+        border-color: $color-frame;
+
+        outline: none;
+    }
+    
+
+    .title {
+        font-weight: $normal_font_weight;
+        font-size: $font_size_15;
+        padding-top: 5px;
+        color: $color-navbar-not-selected;
+    }
+    
+    .input {
+        height: 159px;
+        width: 649px;
+
+        border-radius: 3px;
+        border-width: 2px;
+        border-color: $color-frame;
+        
+        outline: none;
+        background-color: $color-background;
+    }
+
+    .button {
+        margin-left: 455px;
+        margin-top: 15px;
+        align-items: center;
+        justify-content: space-between;
+        display: flex;
+        width: 199px;
+        height: 43px;
+        outline: none;
+        border-radius: 6px;
+        box-shadow: 0px 4px 4px $color-shadow;
+
+        background-color: $color-deferred;
+        font-size: $font_size_13;
+        font-weight: $large_font_weight;
+        color: $color-navbar-not-selected;
+        
+    }
+}

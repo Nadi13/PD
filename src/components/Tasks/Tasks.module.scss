@@ -1,0 +1,40 @@
+@import 'src/myTools/colors.scss';
+@import 'src/myTools/size.scss';
+
+.tasks{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: top;
+    background-color: $color-background;
+    margin-top: 35px;
+    margin-left: 85px;
+    width: 338px;
+    height: 343px;
+    border-radius: 3px;
+
+    .nav {
+        display: flex;
+        align-items: center;
+
+        .ul {
+          list-style: none;
+          
+            li {
+                display:flex;
+                margin: 20px;
+                font-size: $font_size_15;
+    
+                a {
+                    text-decoration: none;
+                    color: $color-lab;
+
+                    font-weight: $normal_font_weight;
+                }
+                .a1 {
+                    color: $color-lab1;
+                }
+            }
+        }
+    }
+}
