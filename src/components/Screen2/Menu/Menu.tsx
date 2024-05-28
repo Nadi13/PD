@@ -1,7 +1,7 @@
 import css from './Menu.module.scss';
-import strings from '../../myTools/strings.tsx';
+import strings from '../../../myTools/strings.tsx';
 
-import Calendar from '../Calendar/Calendar';
+import Calendar from '../Calendar/Calendar.tsx';
 
 const Menu = () => {
     return <>

@@ -1,18 +1,21 @@
 import css from './LabInfo.module.scss';
-import strings from '../../myTools/strings.tsx';
+import strings from '../../../myTools/strings.tsx';
+import { useLocation } from "react-router-dom";
 
 const LabInfo = () => {
+    const location = useLocation();
+    const selectedRequest = location.state;
     return <>
         <div className = {css.container}>
             <div className = {css.info}>
                 <div className = {css.student}>
-                    <div className = {css.circle}>{strings.C}</div>
-                    <div className = {css.fio}>{strings.FIO}</div>
-                    <div className = {css.group}>{strings.Fit}</div>
-                    <div className = {css.course}>{strings.Course}</div>
+                    <div className = {css.circle}>{selectedRequest.name.split(" ")[0].charAt(0)}</div>
+                    <div className = {css.fio}>{selectedRequest.name}</div>
+                    <div className = {css.group}>{selectedRequest.number}</div>
+                    <div className = {css.course}>{selectedRequest.course}</div>
                 </div>
                 <div className = {css.work}>
-                    <div className = {css.lab}>{strings.Lab1}</div>
+                    <div className = {css.lab}>Лабораторная работа №{selectedRequest.work}</div>
                     <div className= {css.variant}>{strings.Variant}</div>
                 </div>
                 <div className = {css.description}>{strings.Description}</div>
@@ -20,7 +23,7 @@ const LabInfo = () => {
                     {strings.Content}
                     <div className = {css.text}>
                         {strings.Data1}
-                        <div className = {css.data}> {strings.Data2}</div>
+                        <div className = {css.data}> {selectedRequest.date}</div>
                     </div>
                 </div>
                 <div className = {css.box}></div>

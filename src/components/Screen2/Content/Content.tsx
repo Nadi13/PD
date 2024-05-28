@@ -1,6 +1,6 @@
 import css from './Content.module.scss'
-import Menu from '../Menu/Menu.tsx';
-import LabInfo from '../LabInfo/LabInfo.tsx';
+import Menu from '.././Menu/Menu.tsx';
+import LabInfo from '.././LabInfo/LabInfo.tsx';
 
 const Content = () => {
     

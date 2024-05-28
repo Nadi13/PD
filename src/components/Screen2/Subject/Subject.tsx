@@ -1,5 +1,5 @@
 import css from './Subject.module.scss';
-import strings from '../../myTools/strings.tsx';
+import strings from '../../../myTools/strings.tsx';
 import Content from "../Content/Content.tsx";
 
 const Subject = () => {

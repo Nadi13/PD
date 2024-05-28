@@ -1,5 +1,5 @@
-@import 'src/myTools/colors.scss';
-@import 'src/myTools/size.scss';
+@import './src/myTools/colors.scss';
+@import './src/myTools/size.scss';
 
 .container {
     background-color: $color-fon;
@@ -53,7 +53,7 @@
                 height: 18px;
 
                 font-weight: $normal_font_weight;
-                font-size: $font_size_20;
+                font-size: $font_size_17;
                 color: $color-navbar-not-selected;
 
                 line-height: 18px;

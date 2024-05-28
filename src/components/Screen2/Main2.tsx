@@ -1,11 +1,10 @@
 import Header from "./Header/Header";
 import Subject from "./Subject/Subject";
 
-const Main = () => {
+const Main2 = () => {
     return <>
         <Header/>
         <Subject/>
     </>
 }
-
-export default Main;
+export default Main2;

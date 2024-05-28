@@ -1,5 +1,5 @@
 import css from './Header.module.scss'
-import strings from '../../myTools/strings.tsx';
+import strings from '../../../myTools/strings.tsx';
 
 const Header = () => {
     return <>
