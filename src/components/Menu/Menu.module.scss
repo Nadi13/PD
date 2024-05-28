@@ -6,6 +6,7 @@
     display: flex;
     flex-direction: row;
     justify-content: left;
+    width: 100%;
     gap: 59px;
 
     .form {
@@ -33,7 +34,7 @@
         margin-left: 10px;
     }
 
-    select {
+    .selectGroup {
         width: 133px;
         height: 38px;
         
@@ -52,11 +53,22 @@
         outline: none;
     }
 
-    .customCalendar {
-        display: flex;
-        flex-direction: row;
-        width: 230px;
-        height: 65px;
-        border: none !important;
+    .selectWorks {
+        width: 289px;
+        height: 38px;
+
+        background-color: $color-group;
+        color: $color-navbar-not-selected;
+
+        font-weight: $normal_font_weight;
+        font-size: $font_size_15;
+
+        border-radius: 5px;
+        border-width: 1px;
+        border-color: $color-border;
+
+        text-indent: 10px;
+
+        outline: none;
     }
 }

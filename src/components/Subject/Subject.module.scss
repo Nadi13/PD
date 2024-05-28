@@ -3,12 +3,10 @@
 
 .container {
     display: flex;
-    position: relative;
     flex-direction: row;
     justify-content: top;
     width: 100%;
-    height: 625px;
-    margin-top: 112px;
+    height: 100%;
 
     .content {
         position: relative;
@@ -20,7 +18,7 @@
         background-color:$color-subject;
         padding-top: 21px;
         gap: 40px;
-        padding-left: 63px;
+        padding-left: 59px;
         padding-right: 63px;
 
         select {

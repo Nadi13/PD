@@ -2,14 +2,13 @@
 @import 'src/myTools/size.scss';
 
 .header {
-    position: fixed;
-    top: 0;
     display: flex;
     justify-content: center;
     background: $color-background;
     width: 100%;
     height: 112px;
-    gap: 8%;
+    gap: 3%;
+    margin-left: -38px;
     
     .nav {
         display: flex;

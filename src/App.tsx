@@ -1,11 +1,9 @@
-import Header from "./components/Header/Header"
-import Subject from "./components/Subject/Subject"
+import Main from "./components/Main"
 
 function App() {
   return (
     <>
-     <Header/>
-     <Subject/>
+     <Main/>
     </>
   )
 }
