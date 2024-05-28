@@ -1,6 +1,7 @@
 @import 'src/myTools/colors.scss';
 @import 'src/myTools/size.scss';
 
+
 .menu {
     display: flex;
     flex-direction: row;
@@ -51,7 +52,11 @@
         outline: none;
     }
 
-    .calendar {
-        
+    .customCalendar {
+        display: flex;
+        flex-direction: row;
+        width: 230px;
+        height: 65px;
+        border: none !important;
     }
 }

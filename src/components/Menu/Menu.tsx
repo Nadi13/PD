@@ -1,5 +1,6 @@
 import css from './Menu.module.scss';
 import strings from '../../myTools/strings.tsx';
+import { Calendar } from 'primereact/calendar';
 
 const Menu = () => {
     return <>
@@ -12,6 +13,9 @@ const Menu = () => {
                 <option value = "">{strings.Group}</option>
                 <option value = "">{strings.Mo211}</option>
             </select>
+            <div className = {css.customCalendar}>
+                <Calendar v-model="date"/>
+            </div>
         </div>
     </>
 }
