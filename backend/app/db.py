@@ -3,6 +3,9 @@ from typing import Any, Callable, Sequence
 from general import Disposable
 import sqlalchemy as sql
 import sqlalchemy.orm as orm
+from general import DBObject
+from icecream import ic
+from fastapi.encoders import jsonable_encoder
 
 __all__ = ["DataProvider", "SQLDBProvider", "PostgreSQLProvider"]
 
@@ -21,9 +24,9 @@ class SQLDBProvider(DataProvider, Disposable):
         self.engine = sql.create_engine(engine, echo=True)
         self.db = self.engine.connect()
     
-    def query(self, query: sql.Executable, **kwargs) -> Sequence[Any]:
+    def query(self, query: sql.Executable, **kwargs) -> dict[str, Any]:
         with orm.Session(self.engine) as session:
-            result = session.scalars(query, kwargs).all()
+            result: dict[str, Any] = jsonable_encoder(session.scalars(query, kwargs).all())
             session.commit()
         return result
     

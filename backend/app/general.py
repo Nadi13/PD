@@ -1,5 +1,6 @@
 from typing import Any
 from abc import ABCMeta, abstractmethod
+from sqlalchemy.orm import DeclarativeBase
 
 
 class Disposable(metaclass=ABCMeta):
@@ -10,3 +11,6 @@ class Disposable(metaclass=ABCMeta):
     @abstractmethod
     def dispose() -> None:
         raise NotImplementedError
+
+class DBObject(DeclarativeBase):
+    pass

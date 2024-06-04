@@ -4,6 +4,7 @@ from containers.queries import Queries
 from hashlib import sha256
 from config import config
 from icecream import ic
+from general import DBObject
 
 
 User: TypeAlias = dict[str, Any]
@@ -14,8 +15,7 @@ PROVIDER: Final[str] = config["dataProvider"]
 def get(id: str, provider: DataProvider) -> Optional[User]:
     if not (id and id.isalnum()):
         return None
-    user: dict[str, Any] = provider.query(Queries.get(config[PROVIDER], "user.get")(id))[0]
-    print(user)
+    user: dict[str, Any] = provider.query(Queries.get(PROVIDER, "user.get")(id))[0]
     return user
 
 def _validate_username(username: str) -> bool:
@@ -33,7 +33,6 @@ def _validate_user(info: User) -> bool:
     return True
 
 def add(username: str, password: str, info: User, provider: DataProvider) -> Literal["Invalid value", "Success", "Internal error"]:
-    ic(username, password, info)
     if not (_validate_username(username) and _validate_password(password) and _validate_user(info)):
         return "Invalid value"
     
