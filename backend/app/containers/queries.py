@@ -1,19 +1,26 @@
 from string import Template
-from typing import Never
+from typing import Any, Never, Callable, TypeAlias
+from sqlalchemy import insert, select
+from sqlalchemy.orm import load_only
+from users.db_objects import *
 
+
+QueryConstructor: TypeAlias = Callable[..., sql.Executable]
 
 class Queries:
-    _queries: dict[str, dict[str, Template]] = {
+    _queries: dict[str, dict[str, Callable | str | Any]] = {
         "PostgreSQLProvider": {
-            "user.get": Template
-                ('''
-                 select *
-                 from sessions
-                 left join users
-                   on sessions.userId = users.id
-                 where sessions.id = $id
-                '''
-                )
+            "user.get": lambda id: select(User)\
+                                    .join(Session, User.username == Session.userid, isouter=True)
+                                    .where(Session.id == id)\
+                                    .options(load_only(User.surname, User.name, User.patronymic, User.role)),
+
+            "user.add": lambda :
+                insert(User).returning(User)
+        },
+        "MockProvider": {
+            "user.get": lambda *args: "user.get",
+            "user.add": lambda *args: "user.add"
         }
     }
 
@@ -21,5 +28,5 @@ class Queries:
         raise NotImplementedError("Queries class is not intended to init")
     
     @classmethod
-    def get(cls, provider: str, query: str, **kwargs) -> str:
-        return cls._queries[provider][query].substitute(**kwargs)
+    def get(cls, provider: str, query: str) -> QueryConstructor | Any:
+        return cls._queries[provider][query]

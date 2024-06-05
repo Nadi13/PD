@@ -1,0 +1,6 @@
+{
+    "dataProvider": "MockProvider",
+    "roles": [
+        "student"
+    ]
+}
