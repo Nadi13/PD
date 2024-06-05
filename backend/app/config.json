@@ -1,9 +1,5 @@
 {
-    "dataProvider": "PostgreSQLProvider",
-    "dataProviderParameters": {
-        "location": "localhost:25683",
-        "database": "postgres"
-    },
+    "dataProvider": "MockProvider",
     "roles": [
         "student"
     ]

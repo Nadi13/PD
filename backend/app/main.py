@@ -1,5 +1,6 @@
 from typing import Any
 from fastapi import FastAPI, Request, HTTPException, Response, Body
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 import db
 import json
@@ -7,6 +8,7 @@ from config import config
 import users.main as users
 import cards.main as cards
 from icecream import ic
+
 
 
 data_provider: db.DataProvider
@@ -23,6 +25,13 @@ __initialize()
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
@@ -37,12 +46,12 @@ async def root():
 </html>
 ''')
 
+
 @app.get("/api/user")
 async def get_user(sessionKey: str):
     response = users.get(sessionKey, data_provider)
     if not response:
         raise HTTPException(status_code=401, detail="User is unauthenticated")
-    ic(response)
     return response
 
 @app.post("/api/user/register")
@@ -65,7 +74,6 @@ async def login(username: str, password: str, response: Response):
 async def create_card():
 
     raise NotImplementedError
-
 # teacher gets labs list
 @app.get("/api/cards")
 async def cards_list():

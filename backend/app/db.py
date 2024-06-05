@@ -48,7 +48,6 @@ class PostgreSQLProvider(SQLDBProvider):
 
 class MockProvider(DataProvider):
     '''Data provider for debugging without actual db'''
-
     _queries: dict[str, dict] = {
         "user.get": {
             "username": "test5642",
@@ -76,6 +75,38 @@ class MockProvider(DataProvider):
             "lecturer": "test5642",
             "description": "Установить .NET 7 и запустить Hello World."
         }
+        #"user.get": [{
+        #    "name": "Юдинцева Надежда Ивановна",
+        #    "number": "МО-211/2",
+        #    "work": "3",
+        #    "course": "3 курс, 2 сем",
+        #    "date": "пт, 1 апр., 16:34",
+        #    "deadline": "true"
+        #},
+        #{
+        #    "name": "Филякин Артем Дмитриевич",
+        #    "number": "МО-211/2",
+        #    "work": "2",
+        #    "course": "3 курс, 2 сем",
+        #    "date": "пт, 3 фев., 13:40",
+        #    "deadline": "true"
+        #},
+        #{
+        #    "name": "Савченко София Дмитриевна",
+        #    "number": "ФИТ-211/2",
+        #    "work": "3",
+        #    "course": "3 курс, 2 сем",
+        #    "date": "пт, 13 фев., 22:43"
+        #},
+        #{
+        #    "name": "Аникина Софья Дмитриевна",
+        #    "number": "МО-211/1",
+        #    "work": "5",
+        #    "course": "3 курс, 2 сем",
+        #    "date": "пт, 14 апр., 19:14"
+        #}
+        #],
+        #"user.add": [{"success": True}]
     }
 
     def query(self, query: str, **kwargs) -> Any:

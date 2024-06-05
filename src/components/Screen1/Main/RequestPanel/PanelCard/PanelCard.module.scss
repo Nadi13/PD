@@ -1,0 +1,87 @@
+@import 'src/myTools/colors.scss';
+@import 'src/myTools/size.scss';
+
+.content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: top;
+    width: 260px;
+    background-color:$color-subject;
+    padding-top: 21px;
+    gap: 40px;
+    padding-left: 59px;
+    padding-right: 63px;
+
+    select {
+        width: 157px;
+        height: 38px;
+        
+        background-color: $color-background;
+        color: $color-navbar-not-selected;
+
+        font-weight: $normal_font_weight;
+        font-size: $font_size_15;
+
+        border-radius: 6px;
+        border-width: 2px;
+        border-color: $color-border;
+
+        text-indent: 10px;
+
+        outline: none;
+    }
+
+    .textBlock {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px;
+
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 190px;
+            height: 38px;
+            margin: 0;
+
+            outline: none;
+            border-radius: 6px;
+            box-shadow: 0px 4px 4px $color-shadow;
+
+            line-height: 14px;
+            background-color: $color-background;
+            font-size: 12px;
+            font-weight: 700;   
+            color: $color-button;
+
+            .count {
+                width: 11px;
+                height: 17;
+
+                font-size: $font_size_13;
+                font-weight: $normal_font_weight;
+                color: $color-count;
+            }
+
+            &:hover {
+                border: none;
+                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        .button1 {
+            background-color: $color-deferred;
+        }
+
+        .button2 {
+            background-color: $color-accepted;
+        }
+
+        .button3 {
+            background-color: $color-rejected;
+        }
+    }
+}
