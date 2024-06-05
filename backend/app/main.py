@@ -5,6 +5,8 @@ import db
 import json
 from config import config
 import users.main as users
+import cards.main as cards
+import os
 
 
 data_provider: db.DataProvider
@@ -13,8 +15,8 @@ def __initialize() -> None:
     global data_provider
 
     providerType: type = config["dataProvider"]
-    parameters: dict[str, Any] = config["dataProviderParameters"]
-    secrets: dict[str, str] = config["secrets"][str(providerType)]
+    parameters: dict[str, Any] = config.get("dataProviderParameters", dict())
+    secrets: dict[str, str] = config["secrets"].get(str(providerType), {})
     data_provider = vars(db)[providerType](**parameters, **secrets)
 
 __initialize()
@@ -60,6 +62,7 @@ async def login(username: str, password: str, response: Response):
 # student sends new lab
 @app.put("/api/card/create")
 async def create_card():
+
     raise NotImplementedError
 
 # teacher gets labs list

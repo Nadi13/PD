@@ -17,6 +17,10 @@ class Queries:
 
             "user.add": lambda :
                 insert(User).returning(User)
+        },
+        "MockProvider": {
+            "user.get": lambda *args: "user.get",
+            "user.add": lambda *args: "user.add"
         }
     }
 
@@ -24,5 +28,5 @@ class Queries:
         raise NotImplementedError("Queries class is not intended to init")
     
     @classmethod
-    def get(cls, provider: str, query: str) -> QueryConstructor | str | Any:
+    def get(cls, provider: str, query: str) -> QueryConstructor | Any:
         return cls._queries[provider][query]

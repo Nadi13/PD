@@ -43,3 +43,20 @@ class SQLDBProvider(DataProvider, Disposable):
 class PostgreSQLProvider(SQLDBProvider):
     def __init__(self, login: str, password: str, location: str, database: str) -> None:
         super().__init__(f"postgresql://{login}:{password}@{location}/{database}")
+
+class MockProvider(DataProvider):
+    '''Data provider for debugging without actual db'''
+
+    _queries: dict[str, dict] = {
+        "user.get": [{
+            "username": "test5642",
+            "patronymic": "testovich",
+            "surname": "test",
+            "name": "tes1",
+            "role": "human"
+        }],
+        "user.add": [{"success": True}]
+    }
+
+    def query(self, query: str, **kwargs) -> Any:
+        return self._queries[query]
