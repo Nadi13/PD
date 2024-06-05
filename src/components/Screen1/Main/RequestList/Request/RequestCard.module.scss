@@ -1,0 +1,129 @@
+@import 'src/styles';
+@import 'src/myTools/colors.scss';
+
+.content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: top;
+    background-color: $color-content;
+    padding-top: 21px;
+    padding-left: 30px;
+    padding-right: 18px;
+    width: 100%
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px;
+    border-radius: 6px;
+    height: 90px;
+
+    .elements {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+
+        .infoStudent {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            
+
+            .icon {
+                display: flex;
+                gap: 12px;
+
+                .circleWrap {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 38px;
+                    height: 38px;
+                    border-radius: 50%;
+                    background-color: $color-request-icon-back;
+                    box-shadow: 0px 4px 4px $color-shadow;
+
+                    .iconTypography {
+                        font-size: 20px;
+                        font-weight: 500;
+                    }
+                }
+            }
+
+            .info1 {
+
+                display: flex;
+                flex-direction: column;
+                width: 295px;
+                gap: 10px;
+
+                .name {
+                    color: $color-request-name;
+                    font-size: 20px;
+                    font-weight: 500;
+                }
+
+                .work {
+                    color: $color-work;
+                    font-size: 20px;
+                    font-weight: 700;
+                    margin-top: 17px;
+                }
+
+            }
+
+            .info2 {
+                margin-left: 30px;
+                color: $color-number;
+                font-size: 20px;
+                font-weight: 500;
+
+                .highlight {
+                    font-weight: 700;
+                }
+
+            }
+        }
+
+        .info3 {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 33px;
+
+            .course {
+                color: $color-course;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .requestData {
+
+                display: flex;
+                flex-direction: row;
+                gap: 9px;
+
+
+                .text {
+                    align-self: flex-end;
+                    color: $color-request-text;
+                    font-size: 13px;
+                    font-weight: 500;
+                }
+
+                .data {
+                    align-self: flex-end;
+                    color: $color-request-data;
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+            }
+
+        }
+    }
+
+}
