@@ -6,7 +6,9 @@ import db
 import json
 from config import config
 import users.main as users
-import os
+import cards.main as cards
+from icecream import ic
+
 
 
 data_provider: db.DataProvider
@@ -50,7 +52,6 @@ async def get_user(sessionKey: str):
     response = users.get(sessionKey, data_provider)
     if not response:
         raise HTTPException(status_code=401, detail="User is unauthenticated")
-
     return response
 
 @app.post("/api/user/register")
@@ -85,8 +86,14 @@ async def overview():
 
 # teacher gets a lab
 @app.get("/api/card")
-async def get_card():
-    raise NotImplementedError
+async def get_card(sessionKey: str, id: int):
+    user = users.get(sessionKey, data_provider)
+    if not user:
+        raise HTTPException(status_code=401, detail="User is unauthenticated")
+    response = cards.get(id, data_provider)
+    if not response:
+        raise HTTPException(status_code=400, detail="Card does not exist")
+    return response
 
 # teacher accepts, denies and leaves a comment to a lab request, otlozhenyye
 @app.put("/api/card/update")

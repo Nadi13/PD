@@ -1,4 +1,4 @@
-from typing import Any, Final, Hashable, Literal, Optional, TypeAlias
+from typing import Any, Final, Hashable, Literal, Optional, Sequence, TypeAlias
 from db import DataProvider
 from containers.queries import Queries
 from hashlib import sha256
@@ -15,9 +15,11 @@ PROVIDER: Final[str] = config["dataProvider"]
 def get(id: str, provider: DataProvider) -> Optional[User]:
     if not (id and id.isalnum()):
         return None
-    user: dict[str, Any] = provider.query(Queries.get(PROVIDER, "user.get")(id)) 
-    return user 
-    
+    user: Sequence[dict[str, Any]] = provider.query(Queries.get(PROVIDER, "user.get")(id))
+    if not user:
+        return None
+    return user
+
 def _validate_username(username: str) -> bool:
     return 4 < len(username) < 33 and username.isprintable()
 
@@ -40,9 +42,10 @@ def add(username: str, password: str, info: User, provider: DataProvider) -> Lit
         Queries.get(
             PROVIDER,
             "user.add",
-        )(),
-        username=username,
-        password=password,
-        **info
+        )(
+            username=username,
+            password=password,
+            **info
+        )
     )
     return "Success" if isSuccessful else "Internal error"
