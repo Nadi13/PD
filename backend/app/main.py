@@ -5,7 +5,7 @@ import db
 import json
 from config import config
 import users.main as users
-import cards.main as cards
+# import cards.main as cards
 import os
 
 
