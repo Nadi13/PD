@@ -55,13 +55,14 @@
                 margin: 0;
 
                 outline: none;
+                border-color: none;
                 border-radius: 6px;
                 box-shadow: 0px 4px 4px $color-shadow;
 
                 line-height: 14px;
                 background-color: $color-background;
-                font-size: $font_size_11;
-                font-weight: $large_font_weight;
+                font-size: 12px;
+                font-weight: 700;   
                 color: $color-button;
 
                 .count {
@@ -71,6 +72,12 @@
                     font-size: $font_size_13;
                     font-weight: $normal_font_weight;
                     color: $color-count;
+                }
+
+                &:hover {
+                    outline: none;
+                    border: none;
+                    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
                 }
             }
 

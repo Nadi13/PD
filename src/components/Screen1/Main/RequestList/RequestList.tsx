@@ -15,6 +15,7 @@ const requests = [
 const RequestList = () => {
     const navigate = useNavigate();
     return <>
+    <div className = {classes.container}>
         <div className={classes.wrap}>
             {requests.map((item) => 
                 <RequestCard
@@ -27,6 +28,7 @@ const RequestList = () => {
                     onClick={() => navigate("/LabInfo", {state: item})}
                 />
             )}
+        </div>
         </div>
     </>
 }

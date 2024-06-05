@@ -17,6 +17,7 @@ const RequestCard = (props: { name: string, number: string, work: string, course
     return <>
         <div className={classes.container} style={{ backgroundColor: props.deadline ? '#FFCFBA' : '#E9EAFF' }} onClick={props.onClick}>
             <div className={classes.elements}>
+                <div className = {classes.infoStudent}>
                 <div className={classes.icon}>
                     <div className={classes.circleWrap}>
                         <div className={classes.iconTypography} style={{ color: randomColor }}>{props.name.split(" ")[0].charAt(0)}</div>
@@ -29,6 +30,7 @@ const RequestCard = (props: { name: string, number: string, work: string, course
                 <div className={classes.info2}>{props.number.slice(0, -1)}
                     <span className={classes.highlight}>{props.number.slice(-1)}</span>
                 </div>
+                </div>
                 <div className={classes.info3}>
                     <div className={classes.course}>{props.course}</div>
                     <div className={classes.requestData}>
@@ -39,6 +41,7 @@ const RequestCard = (props: { name: string, number: string, work: string, course
             </div>
 
         </div>
+        
 
     </>
 

@@ -1,8 +1,22 @@
-.container {
+@import 'src/myTools/colors.scss';
 
+.container {
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 100%;
 
+}
+
+.content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: top;
+    background-color: $color-content;
+    padding-top: 21px;
+    padding-left: 30px;
+    padding-right: 18px;
+    width: 100%;
 }

@@ -1,12 +1,17 @@
 import RequestList from '../RequestList/RequestList';
-import RequestPanel from '../RequestPanel/RequestPanel';
+import RequestPanel from '../RequestPanel/PanelCard/PanelCard.tsx';
 import classes from './Body.module.scss'
+import Menu from '../../../Screen2/Menu/Menu.tsx';
+
 
 const Body = () => {
     return <>
         <div className={classes.container}>
             <RequestPanel />
-            <RequestList />
+            <div className = {classes.content}>
+                <Menu/>
+                <RequestList />
+            </div>
         </div>
     </>
 }
