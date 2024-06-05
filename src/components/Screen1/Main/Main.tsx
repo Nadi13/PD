@@ -4,7 +4,7 @@ import Body from "./Body/Body";
 const Main = () => {
     return <>
         <Header/>
-        <Body/>     
+        <Body/>  
     </>
 }
 

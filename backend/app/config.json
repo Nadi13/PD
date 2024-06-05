@@ -1,3 +1,6 @@
 {
-    "dataProvider": "PostgreSQLProvider"
+    "dataProvider": "MockProvider",
+    "roles": [
+        "student"
+    ]
 }

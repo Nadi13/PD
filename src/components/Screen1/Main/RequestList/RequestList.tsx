@@ -1,22 +1,44 @@
 import classes from './RequestList.module.scss'
 import RequestCard from './Request/RequestCard'
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from 'axios';
-
-const response = await axios.get('/api/cards');
-
-const requests = [
-    { name: 'Юдинцева Надежда Ивановна', number: 'МО-211/2', work: '3', course: '3 курс, 2 сем', date: 'пт, 1 апр., 16:34', deadline: true},
-    { name: 'Филякин Артем Дмитриевич', number: 'МО-211/2', work: '2', course: '3 курс, 2 сем', date: 'пт, 3 фев., 13:40', deadline: true},
-    { name: 'Савченко София Дмитриевна', number: 'ФИТ-211/2', work: '1', course: '3 курс, 2 сем', date: 'пт, 13 фев., 22:43' },
-    { name: 'Аникина Софья Дмитриевна', number: 'МО-211/1', work: '2', course: '3 курс, 2 сем', date: 'пт, 14 мая, 16:20' },
-    { name: 'Бугаенко Иван Евгеньевич', number: 'ФИТ-212/1', work: '1', course: '3 курс, 2 сем', date: 'пт, 14 апр., 19:14' },
-]
 
 
 const RequestList = () => {
+    const [requests, setRequests] = useState<Array<{
+        name: string;
+        number: string;
+        work: string;
+        course: string;
+        date: string;
+        deadline: boolean;
+    }>>([]);
     const navigate = useNavigate();
-    return <>
+
+    useEffect(() => {
+        const fetchRequests = async () => {
+          const { data } = await axios.get(
+            "http://127.0.0.1:8000/api/user?sessionKey=123"
+          );
+          const requests = Object.values(data) as any[];
+          console.log(requests)
+
+          setRequests(requests.map((request) => ({
+            name: request.name,
+            number: request.number,
+            work: request.work,
+            course: request.course,
+            date: request.date,
+            deadline: request.deadline
+          })));
+        };
+
+        fetchRequests();
+      }, []);
+
+
+    return( <>
     <div className = {classes.container}>
         <div className={classes.wrap}>
             {requests.map((item) => 
@@ -33,6 +55,7 @@ const RequestList = () => {
         </div>
         </div>
     </>
+    );
 }
 
 export default RequestList;
