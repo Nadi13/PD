@@ -12,7 +12,6 @@ data_provider: db.DataProvider = vars(db)[config.get("dataProvider")]()
 
 app = FastAPI()
 
-
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -36,7 +35,10 @@ async def login(username: str, password: str, response: Response):
 async def create_card():
     raise NotImplementedError
 
-# teacher gets labs list
+@app.get("/api/cards")
+async def cards_list():
+    with open("./mockData.json") as file:
+        return json.load(file)
 
 # teacher gets preview numbers 
 

@@ -3,7 +3,6 @@ import { BrowserRouter } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 import Main2 from "./components/Screen2/Main2"
 
-
 function App() {
   return (
     <>

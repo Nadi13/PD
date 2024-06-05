@@ -1,7 +1,9 @@
 import classes from './RequestList.module.scss'
 import RequestCard from './Request/RequestCard'
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
+const response = await axios.get('/api/cards');
 
 const requests = [
     { name: 'Юдинцева Надежда Ивановна', number: 'МО-211/2', work: '3', course: '3 курс, 2 сем', date: 'пт, 1 апр., 16:34', deadline: true},
