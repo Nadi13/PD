@@ -22,12 +22,14 @@ class Queries:
                                     .where(Card.id == id)\
                                     .join(User, User.username == Card.studentid and User.username == Lab.lecturer)\
                                     .join(Lab, Lab.id == Card.labid)\
-                                    .options(defer(User.password))
+                                    .options(defer(User.password)),
+            "card.get.all": lambda: select(Card)
         },
         "MockProvider": {
             "user.get": lambda *args: "user.get",
             "user.add": lambda *args: "user.add",
-            "card.get": lambda *args: "card.get"
+            "card.get": lambda *args: "card.get",
+            "card.get.all": lambda *args: "card.get.all"
         }
     }
 

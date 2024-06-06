@@ -10,7 +10,11 @@ from fastapi.encoders import jsonable_encoder
 PROVIDER: Final[str] = config["dataProvider"]
 
 def get(id: int, provider: DataProvider) -> Optional[dict[str, Any]]:
-    card: dict[str, Any] = provider.query(Queries.get(PROVIDER, "card.get")(id))
-    if not card:
+    cards: Sequence[dict[str, Any]] = provider.query(Queries.get(PROVIDER, "card.get")(id))
+    if not cards:
         return None
-    return card
+    return cards[0]
+
+def get_all(provider: DataProvider) -> dict[str, Any]:
+    cards: dict[str, Any] = provider.query(Queries.get(PROVIDER, "card.get.all")())
+    return cards

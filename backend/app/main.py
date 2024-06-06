@@ -76,8 +76,12 @@ async def create_card():
     raise NotImplementedError
 # teacher gets labs list
 @app.get("/api/cards")
-async def cards_list():
-    raise NotImplementedError
+async def cards_list(sessionKey: str):
+    user = users.get(sessionKey, data_provider)
+    if not user:
+        raise HTTPException(status_code=401, detail="User is unauthenticated")
+    response = cards.get_all(data_provider)
+    return response
 
 # teacher gets preview numbers
 @app.get("/api/overview")

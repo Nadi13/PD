@@ -15,10 +15,10 @@ PROVIDER: Final[str] = config["dataProvider"]
 def get(id: str, provider: DataProvider) -> Optional[User]:
     if not (id and id.isalnum()):
         return None
-    user: Sequence[dict[str, Any]] = provider.query(Queries.get(PROVIDER, "user.get")(id))
-    if not user:
+    users: Sequence[dict[str, Any]] = provider.query(Queries.get(PROVIDER, "user.get")(id))
+    if not users:
         return None
-    return user
+    return users[0]
 
 def _validate_username(username: str) -> bool:
     return 4 < len(username) < 33 and username.isprintable()

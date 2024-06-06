@@ -11,9 +11,10 @@ class Lab(DBObject):
     id: Mapped[int] = mapped_column(sql.Integer, primary_key=True)
     name: Mapped[str] = mapped_column(sql.Text)
     description: Mapped[str] = mapped_column(sql.Text)
+    semester: Mapped[int] = mapped_column(sql.SmallInteger)
     groupname: Mapped[str] = mapped_column(sql.Text, sql.ForeignKey("groups.name"))
     lecturer: Mapped[str] = mapped_column(sql.String(32), sql.ForeignKey("users.username"))
-
+    deadline: Mapped[datetime] = mapped_column(sql.DateTime)
 
 class Card(DBObject):
     __tablename__ = "cards"
