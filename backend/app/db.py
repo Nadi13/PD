@@ -23,12 +23,14 @@ class SQLDBProvider(DataProvider, Disposable):
         self.engine = sql.create_engine(engine, echo=True)
         self.db = self.engine.connect()
     
-    def query(self, query: sql.Executable, **kwargs) -> dict[str, Any]:
+    def query(self, query: sql.Executable, **kwargs) -> Sequence[dict[str, Any]]:
         with orm.Session(self.engine) as session:
             result: Sequence[Any] = session.execute(query, kwargs).all()
-            compiled_result = dict()
-            for item in result[0]:
-                compiled_result.update(*jsonable_encoder([item]))
+            compiled_result: list[dict[str, Any]] = []
+            for item in result:
+                compiled_result.append(dict())
+                for object_ in item:
+                    compiled_result[-1].update(*jsonable_encoder([object_]))
             session.commit()
         return compiled_result
     
