@@ -24,8 +24,8 @@ class Session(DBObject):
 class StudentToGroupPair(DBObject):
     __tablename__ = "studentToGroup"
 
-    userid: Mapped[str] = mapped_column(sql.String(32), sql.ForeignKey("users.username"), primary_key=True)
-    group: Mapped[str] = mapped_column(sql.Text, sql.ForeignKey("group.name"), primary_key=True)
+    userid: Mapped[str] = mapped_column(sql.String(32), sql.ForeignKey("users.username"))
+    group: Mapped[str] = mapped_column(sql.Integer, sql.ForeignKey("group.name"))
 
     __table_args__ = (
         sql.PrimaryKeyConstraint(
@@ -34,8 +34,26 @@ class StudentToGroupPair(DBObject):
         ),
     )
 
+class LecturerToLabPair(DBObject):
+    __tablename__ = "lecturertolab"
+
+    userid: Mapped[str] = mapped_column(sql.String(32), sql.ForeignKey("users.username"))
+    labid: Mapped[int] = mapped_column(sql.Integer, sql.ForeignKey("labs.id"))
+
+    __table_args__ = (
+        sql.PrimaryKeyConstraint(
+            userid,
+            labid
+        ),
+    )
+
 class Group(DBObject):
     __tablename__ = "groups"
 
     name: Mapped[str] = mapped_column(sql.Text, primary_key=True)
     description: Mapped[Optional[str]] = mapped_column(sql.Text, nullable=True)
+
+#class Student(DBObject):
+#    __tablename__ = "students"
+#
+#    username: Mapped[str] = mapped_column(sql.String(32), sql.ForeignKey("users.username"), primary_key=True)
