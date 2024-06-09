@@ -16,7 +16,7 @@ def get(id: str, provider: DataProvider) -> Optional[User]:
     users: Sequence[dict[str, Any]] = provider.query(Queries.get(PROVIDER, "user.get", id))
     if not users:
         return None
-    return User(**users[0])
+    return User(**users[0][0])
 
 def _validate_username(username: str) -> bool:
     return 4 < len(username) < 33 and username.isprintable()
@@ -40,7 +40,6 @@ def add(user: UserWithCredentials, provider: DataProvider) -> Literal["Invalid v
         Queries.get(
             PROVIDER,
             "user.add",
-        )(
             username=user.username,
             password=sha256(user.password.encode()).hexdigest(),
             **user.model_dump(exclude=["username", "password"])

@@ -23,7 +23,7 @@ class Card(BaseModel):
 
 class FullCard(BaseModel):
     id: int
-    studentid: str
+    student: User
     lab: Lab
     content: str
     comments: str

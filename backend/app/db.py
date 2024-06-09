@@ -5,6 +5,8 @@ import sqlalchemy as sql
 import sqlalchemy.orm as orm
 from icecream import ic
 from fastapi.encoders import jsonable_encoder
+from general import DBObject
+
 
 __all__ = ["DataProvider", "SQLDBProvider", "PostgreSQLProvider"]
 
@@ -26,11 +28,13 @@ class SQLDBProvider(DataProvider, Disposable):
     def query(self, query: sql.Executable, *args, **kwargs) -> Sequence[dict[str, Any]]:
         with orm.Session(self.engine) as session:
             result: Sequence[Any] = session.execute(query, kwargs).all()
-            compiled_result: list[dict[str, Any]] = []
+            ic(result)
+            compiled_result: list[list[dict[str, Any]]] = []
             for item in result:
-                compiled_result.append(dict())
+                compiled_result.append(list())
                 for object_ in item:
-                    compiled_result[-1].update(*jsonable_encoder([object_]))
+                    compiled_result[-1].append(*jsonable_encoder([object_]))
+            ic(compiled_result)
             session.commit()
         return compiled_result
     
