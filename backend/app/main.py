@@ -1,14 +1,14 @@
-from typing import Any
+from typing import Any, Sequence
 from fastapi import FastAPI, Request, HTTPException, Response, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
+from cards.objects import Card, CreatedCard, FullCard
 import db
-import json
 from config import config
 import users.main as users
 import cards.main as cards
 from icecream import ic
-
+from users.objects import User, UserWithCredentials, UserCredentials
 
 
 data_provider: db.DataProvider
@@ -25,7 +25,7 @@ __initialize()
 
 app = FastAPI()
 
-app.add_middleware(
+app.add_middleware( # to reconsider
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
@@ -48,15 +48,15 @@ async def root():
 
 
 @app.get("/api/user")
-async def get_user(sessionKey: str):
+async def get_user(sessionKey: str) -> User:
     response = users.get(sessionKey, data_provider)
     if not response:
         raise HTTPException(status_code=401, detail="User is unauthenticated")
     return response
 
 @app.post("/api/user/register")
-async def register_user(user: dict[str, Any] = Body()):
-    response = users.add(user["username"], user["password"], user["info"], data_provider)
+async def register_user(user: UserWithCredentials = Body()) -> str:
+    response = users.add(user, data_provider)
     if response == "Invalid value":
         raise HTTPException(status_code=400, detail=response)
     if response == "Internal error":
@@ -64,19 +64,24 @@ async def register_user(user: dict[str, Any] = Body()):
     return response
 
 @app.post("/api/user/login")
-async def login(username: str, password: str, response: Response):
+async def login(user: UserCredentials, response: Response) -> dict[str, Any]:
     #temp
-    response.set_cookie("sessionKey", "123")
+    # response.set_cookie("sessionKey", "123")
     return {"message": "Login successful"}
 
 # student sends new lab
-@app.put("/api/card/create")
-async def create_card():
+@app.put("/api/card/create", status_code=201)
+async def create_card(card: Card = Body()) -> str:
+    response = cards.add(**card)
+    if response == "Invalid value":
+        raise HTTPException(status_code=400, detail=response)
+    if response == "Internal error":
+        raise HTTPException(status_code=500, detail=response)
+    return response
 
-    raise NotImplementedError
 # teacher gets labs list
 @app.get("/api/cards")
-async def cards_list(sessionKey: str):
+async def cards_list(sessionKey: str) -> Sequence[CreatedCard]:
     user = users.get(sessionKey, data_provider)
     if not user:
         raise HTTPException(status_code=401, detail="User is unauthenticated")
@@ -90,7 +95,7 @@ async def overview():
 
 # teacher gets a lab
 @app.get("/api/card")
-async def get_card(sessionKey: str, id: int):
+async def get_card(sessionKey: str, id: int) -> FullCard:
     user = users.get(sessionKey, data_provider)
     if not user:
         raise HTTPException(status_code=401, detail="User is unauthenticated")

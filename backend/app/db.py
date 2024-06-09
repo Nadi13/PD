@@ -12,7 +12,7 @@ __all__ = ["DataProvider", "SQLDBProvider", "PostgreSQLProvider"]
 
 class DataProvider(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def query(self, query: Any, **kwargs) -> Any:
+    def query(self, query: Any, *args, **kwargs) -> Any:
         raise NotImplementedError
 
 # Implementations
@@ -23,7 +23,7 @@ class SQLDBProvider(DataProvider, Disposable):
         self.engine = sql.create_engine(engine, echo=True)
         self.db = self.engine.connect()
     
-    def query(self, query: sql.Executable, **kwargs) -> Sequence[dict[str, Any]]:
+    def query(self, query: sql.Executable, *args, **kwargs) -> Sequence[dict[str, Any]]:
         with orm.Session(self.engine) as session:
             result: Sequence[Any] = session.execute(query, kwargs).all()
             compiled_result: list[dict[str, Any]] = []
@@ -50,66 +50,71 @@ class PostgreSQLProvider(SQLDBProvider):
 
 class MockProvider(DataProvider):
     '''Data provider for debugging without actual db'''
-    _queries: dict[str, dict] = {
-        "user.get": {
-            "username": "test5642",
-            "patronymic": "testovich",
-            "surname": "test",
-            "name": "tes1",
-            "role": "human"
-        },
-        "user.add": {"success": True},
-        "card.get": {
-            "id": 1,
-            "content": "",
-            "status": "Pending",
-            "info": {},
-            "comments": "",
-            "studentid": "asdq1",
-            "labid": 1,
-            "creationdate": "2024-06-06T02:16:52.634746",
-            "surname": "asdf",
-            "name": "Лабораторная работа 1",
-            "username": "asdq1",
-            "role": "student",
-            "patronymic": "asdas",
-            "groupname": "Individual_1",
-            "lecturer": "test5642",
-            "description": "Установить .NET 7 и запустить Hello World."
-        }
-        #"user.get": [{
-        #    "name": "Юдинцева Надежда Ивановна",
-        #    "number": "МО-211/2",
-        #    "work": "3",
-        #    "course": "3 курс, 2 сем",
-        #    "date": "пт, 1 апр., 16:34",
-        #    "deadline": "true"
-        #},
-        #{
-        #    "name": "Филякин Артем Дмитриевич",
-        #    "number": "МО-211/2",
-        #    "work": "2",
-        #    "course": "3 курс, 2 сем",
-        #    "date": "пт, 3 фев., 13:40",
-        #    "deadline": "true"
-        #},
-        #{
-        #    "name": "Савченко София Дмитриевна",
-        #    "number": "ФИТ-211/2",
-        #    "work": "3",
-        #    "course": "3 курс, 2 сем",
-        #    "date": "пт, 13 фев., 22:43"
-        #},
-        #{
-        #    "name": "Аникина Софья Дмитриевна",
-        #    "number": "МО-211/1",
-        #    "work": "5",
-        #    "course": "3 курс, 2 сем",
-        #    "date": "пт, 14 апр., 19:14"
-        #}
-        #],
-        #"user.add": [{"success": True}]
+    _queries: dict[str, list[dict]] = {
+        "user.get": [
+            {
+                "username": "test5642",
+                "patronymic": "testovich",
+                "surname": "test",
+                "name": "tes1",
+                "role": "human"
+            }
+        ],
+        "user.add": [{"success": True}],
+        "card.get": [
+            {
+                "id": 1,
+                "studentid": "asdq1",
+                "lab": {
+                    "id": 1,
+                    "name": "Лабораторная работа 1",
+                    "description": "Установить .NET 7 и запустить Hello World.",
+                    "semester": 3,
+                    "groupname": "Individual_1",
+                    "deadline": "2024-06-06T20:25:29.262096"
+                },
+                "content": "",
+                "comments": "",
+                "variant": None,
+                "info": {},
+                "lecturer": {
+                    "surname": "test",
+                    "name": "Лабораторная работа 1",
+                    "patronymic": "testovich",
+                    "username": "test5642",
+                    "role": "human"
+                },
+                "status": "Pending",
+                "creationdate": "2024-06-06T02:16:52.634746"
+            }
+        ],
+        "cards.get.all": [
+            {
+                "id": 1,
+                "studentid": "asdq1",
+                "labid": 1,
+                "content": "",
+                "comments": "",
+                "lecturerid": "test5642",
+                "variant": None,
+                "info": dict(),
+                "status": "Pending",
+                "creationdate": "2024-06-06T02:16:52.634746"
+            },
+            {
+                "id": 23,
+                "studentid": "asdqasd1",
+                "labid": 3,
+                "content": "Аовылаыр",
+                "comments": "Обратите внимание на MethodName",
+                "lecturerid": "test5642",
+                "variant": 2,
+                "info": dict(),
+                "status": "Declined",
+                "creationdate": "2024-08-06T02:16:52.634746"
+            }
+        ]
     }
 
-    def query(self, query: str, **kwargs) -> Any:
+    def query(self, query: str, *args, **kwargs) -> list[dict]:
         return self._queries[query]
