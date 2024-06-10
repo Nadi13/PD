@@ -1,14 +1,12 @@
 import abc
-from typing import Any, Callable, Sequence
-from general import Disposable
+from typing import Any, Sequence
 import sqlalchemy as sql
-import sqlalchemy.orm as orm
+import sqlalchemy.ext.asyncio as sqla
 from icecream import ic
 from fastapi.encoders import jsonable_encoder
-from general import DBObject
 
 
-__all__ = ["DataProvider", "SQLDBProvider", "PostgreSQLProvider"]
+__all__ = ["DataProvider", "SQLDBProvider"]
 
 # Interfaces
 
@@ -20,37 +18,19 @@ class DataProvider(metaclass=abc.ABCMeta):
 # Implementations
 
 class SQLDBProvider(DataProvider):
-    def __init__(self, engine: str) -> None:
-        super().__init__()
-        self.engine = sql.create_engine(engine, echo=True)
-        # self.db = self.engine.connect()
+    def __init__(self) -> None:
+        pass
     
-    def query(self, query: sql.Executable, *args, **kwargs) -> Sequence[dict[str, Any]]:
-        with orm.Session(self.engine) as session:
-            result: Sequence[Any] = session.execute(query, kwargs).all()
-            ic(result)
-            compiled_result: list[list[dict[str, Any]]] = []
-            for item in result:
-                compiled_result.append(list())
-                for object_ in item:
-                    compiled_result[-1].append(*jsonable_encoder([object_]))
-            ic(compiled_result)
-            session.commit()
+    async def query(self, query: sql.Executable, *args, **kwargs) -> Sequence[dict[str, Any]]:
+        session: sqla.AsyncSession = kwargs["session"]
+        result: Sequence[Any] = (await session.execute(query, kwargs)).all()
+        compiled_result: list[list[dict[str, Any]]] = []
+        for item in result:
+            compiled_result.append(list())
+            for object_ in item:
+                compiled_result[-1].append(*jsonable_encoder([object_]))
+        ic(compiled_result)
         return compiled_result
-    
-    # def dispose(self) -> None:
-    #     try:
-    #         self.db.close()
-    #     except (NameError, AttributeError):
-    #         pass
-    #     self.db = None
-    
-    # def __del__(self) -> None:
-    #     self.dispose()
-
-class PostgreSQLProvider(SQLDBProvider):
-    def __init__(self, login: str, password: str, location: str, database: str) -> None:
-        super().__init__(f"postgresql://{login}:{password}@{location}/{database}")
 
 class MockProvider(DataProvider):
     '''Data provider for debugging without actual db'''
@@ -122,3 +102,9 @@ class MockProvider(DataProvider):
 
     def query(self, query: str, *args, **kwargs) -> list[dict]:
         return self._queries[query]
+    
+    def commit(self) -> None:
+        return
+    
+    def rollback(self) -> None:
+        return

@@ -1,5 +1,5 @@
-from typing import Any, Sequence
-from fastapi import FastAPI, Request, HTTPException, Response, Body
+from typing import Annotated, Any, Sequence, Type, TypeAlias
+from fastapi import FastAPI, Request, HTTPException, Response, Body, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from cards.objects import Card, CreatedCard, FullCard
@@ -8,20 +8,27 @@ from config import config
 import users.main as users
 import cards.main as cards
 from icecream import ic
-from users.objects import User, UserWithCredentials, UserCredentials
+from users.objects import *
+from sessions import SessionManager
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
-data_provider: db.DataProvider
+data_provider: Type[db.DataProvider]
+sessionmanager: SessionManager
 
 def __initialize() -> None:
     global data_provider
+    global sessionmanager
 
     providerType: type = config["dataProvider"]
-    parameters: dict[str, Any] = config.get("dataProviderParameters", dict())
-    secrets: dict[str, str] = config["secrets"].get(str(providerType), {})
-    data_provider = vars(db)[providerType](**parameters, **secrets)
+    session_manager_parameters: dict[str, Any] = config.get("sessionManagerParameters", dict())
+    secrets: dict[str, str] = config["secrets"].get("sessionManager", {})
+    sessionmanager = SessionManager(**session_manager_parameters, **secrets)
+    data_provider = vars(db)[providerType]()
 
 __initialize()
+
+DBSession: TypeAlias  = Annotated[AsyncSession, Depends(sessionmanager.with_session)]
 
 app = FastAPI()
 
@@ -48,15 +55,15 @@ async def root():
 
 
 @app.get("/api/user")
-async def get_user(sessionKey: str) -> User:
-    response = users.get(sessionKey, data_provider)
+async def get_user(sessionKey: str, session: DBSession) -> User:
+    response = await users.get(sessionKey, session, data_provider)
     if not response:
         raise HTTPException(status_code=401, detail="User is unauthenticated")
     return response
 
 @app.post("/api/user/register")
-async def register_user(user: UserWithCredentials = Body()) -> str:
-    response = users.add(user, data_provider)
+async def register_user(session: DBSession, user: RegistrationEntity = Body()) -> str:
+    response = await users.add(user, session, data_provider)
     if response == "Invalid value":
         raise HTTPException(status_code=400, detail=response)
     if response == "Internal error":
@@ -71,8 +78,8 @@ async def login(user: UserCredentials, response: Response) -> dict[str, Any]:
 
 # student sends new lab
 @app.put("/api/card/create", status_code=201)
-async def create_card(card: Card = Body()) -> str:
-    response = cards.add(card, data_provider)
+async def create_card(session: DBSession, card: Card = Body()) -> str:
+    response = await cards.add(card, session, data_provider)
     if response == "Invalid value":
         raise HTTPException(status_code=400, detail=response)
     if response == "Internal error":
@@ -81,11 +88,11 @@ async def create_card(card: Card = Body()) -> str:
 
 # teacher gets labs list
 @app.get("/api/cards")
-async def cards_list(sessionKey: str) -> Sequence[FullCard]:
-    user = users.get(sessionKey, data_provider)
+async def cards_list(sessionKey: str, session: DBSession) -> Sequence[FullCard]:
+    user = await users.get(sessionKey, session, data_provider)
     if not user:
         raise HTTPException(status_code=401, detail="User is unauthenticated")
-    response = cards.get_all(data_provider)
+    response = await cards.get_all(data_provider, session)
     return response
 
 # teacher gets preview numbers
@@ -95,11 +102,11 @@ async def overview():
 
 # teacher gets a lab
 @app.get("/api/card")
-async def get_card(sessionKey: str, id: int) -> FullCard:
-    user = users.get(sessionKey, data_provider)
+async def get_card(sessionKey: str, id: int, session: DBSession) -> FullCard:
+    user = await users.get(sessionKey, session, data_provider)
     if not user:
         raise HTTPException(status_code=401, detail="User is unauthenticated")
-    response = cards.get(id, data_provider)
+    response = await cards.get(id, session, data_provider)
     if not response:
         raise HTTPException(status_code=400, detail="Card does not exist")
     return response

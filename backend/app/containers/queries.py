@@ -23,7 +23,7 @@ class MockQueryProvider(DataProvider):
 
 class Queries:
     _queries: dict[str, DataProvider] = {
-        "PostgreSQLProvider":
+        "SQLDBProvider":
             SQLQueryProvider(
                 {
                     "user.get": lambda id: 
@@ -47,7 +47,9 @@ class Queries:
                         .join(Lab, Lab.id == Card.labid)\
                         .options(defer(Lecturer.password), defer(Student.password)),
                     "card.add": lambda **kwargs:
-                        insert(Card).values(**kwargs).returning(Card)
+                        insert(Card).values(**kwargs).returning(Card),
+                    "group.user.add": lambda username, group:
+                        insert(StudentToGroupPair).values(userid=username, groupname=group).returning(StudentToGroupPair)
                 }
             ),
         "MockProvider": MockQueryProvider()

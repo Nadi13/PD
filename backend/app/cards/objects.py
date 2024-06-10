@@ -35,5 +35,3 @@ class FullCard(BaseModel):
 class CreatedCard(Card):
     status: Literal["Accepted", "Declined", "Postponed", "Pending"]
     creationdate: str
-
-

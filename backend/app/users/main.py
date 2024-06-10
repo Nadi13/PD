@@ -5,15 +5,19 @@ from hashlib import sha256
 from config import config
 from icecream import ic
 from .objects import *
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 ROLES: Final[list[str]] = config["roles"].copy()
 PROVIDER: Final[str] = config["dataProvider"]
 
-def get(id: str, provider: DataProvider) -> Optional[User]:
+async def get(id: str, session: AsyncSession, provider: DataProvider) -> Optional[User]:
+    #ic(config.get("dataProviderParameters", dict()), config["secrets"].get(str(provider), {}))
+    #provider = provider(**config.get("dataProviderParameters", dict()), **config["secrets"].get(PROVIDER, {}))
     if not (id and id.isalnum()):
         return None
-    users: Sequence[dict[str, Any]] = provider.query(Queries.get(PROVIDER, "user.get", id))
+    users: Sequence[dict[str, Any]] = await provider.query(Queries.get(PROVIDER, "user.get", id), session=session)
+    session.commit()
     if not users:
         return None
     return User(**users[0][0])
@@ -24,25 +28,49 @@ def _validate_username(username: str) -> bool:
 def _validate_password(password: str) -> bool:
     return 6 < len(password) < 128 and password.isprintable()
 
-def _validate_user(info: UserWithCredentials) -> bool:
+def _validate_user(user: RegistrationEntity) -> bool:
     for value in ["surname", "name", "patronymic"]:
-        if not vars(info)[value].isalpha():
+        if not vars(user)[value].isalpha():
             return False
-    if info.role not in ROLES:
+    if user.role not in ROLES:
         return False
     return True
 
-def add(user: UserWithCredentials, provider: DataProvider) -> Literal["Invalid value", "Success", "Internal error"]:
-    if not (_validate_username(user.username) and _validate_password(user.password) and _validate_user(user)):
+def _validate_role(user: RegistrationEntity) -> bool:
+    if user.role == "student":
+        try:
+            return user.info.get("group") != None
+        except AttributeError:
+            return False
+    return True
+
+
+async def add(user: RegistrationEntity, session: AsyncSession, provider: DataProvider) -> Literal["Invalid value", "Success", "Internal error"]:
+    if not (_validate_username(user.username) and _validate_password(user.password) and _validate_user(user) and _validate_role(user)):
         return "Invalid value"
     
-    isSuccessful: bool = provider.query(
+    if user.role == "student":
+        user = StudentWithCredentials(**user.model_dump(), group=user.info["group"])
+    ic("qqqq")
+    await provider.query(
         Queries.get(
             PROVIDER,
             "user.add",
             username=user.username,
             password=sha256(user.password.encode()).hexdigest(),
-            **user.model_dump(exclude=["username", "password"])
-        )
+            **user.model_dump(exclude=["username", "password", "group"])
+        ),
+        session=session
     )
-    return "Success" if isSuccessful else "Internal error"
+    if isinstance(user, StudentWithCredentials):
+        await provider.query(
+            Queries.get(
+                PROVIDER,
+                "group.user.add",
+                username=user.username,
+                group=user.group
+            ),
+            session=session
+        )
+    await session.commit()
+    return "Success"

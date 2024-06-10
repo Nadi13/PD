@@ -22,15 +22,15 @@ class Session(DBObject):
     isactive: Mapped[bool] = mapped_column(default=True)
 
 class StudentToGroupPair(DBObject):
-    __tablename__ = "studentToGroup"
+    __tablename__ = "studenttogroup"
 
     userid: Mapped[str] = mapped_column(sql.String(32), sql.ForeignKey("users.username"))
-    group: Mapped[str] = mapped_column(sql.Integer, sql.ForeignKey("group.name"))
+    groupname: Mapped[str] = mapped_column(sql.Text, sql.ForeignKey("groups.name"))
 
     __table_args__ = (
         sql.PrimaryKeyConstraint(
             userid,
-            group
+            groupname
         ),
     )
 
