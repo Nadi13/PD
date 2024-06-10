@@ -27,3 +27,7 @@ class RegistrationEntity(UserWithCredentials, ExtendedEntity):
 class StudentWithCredentials(UserWithCredentials):
     role: Literal["student"]
     group: str
+
+class Group(BaseModel):
+    name: str
+    description: Optional[str]

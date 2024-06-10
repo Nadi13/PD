@@ -123,3 +123,8 @@ async def update_card(update: CardUpdate, session: DBSession, sessionKey: Sessio
         raise HTTPException(status_code=401, detail="User is unauthenticated")
     response = await cards.update(update, session, data_provider)
     return response
+
+@app.get("/groups", status_code=status.HTTP_200_OK)
+async def get_groups(session: DBSession) -> Sequence[Group]:
+    groups = await users.get_all_groups(session, data_provider)
+    return groups

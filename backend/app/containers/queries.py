@@ -53,7 +53,9 @@ class Queries:
                     "group.user.add": lambda username, group:
                         insert(StudentToGroupPair).values(userid=username, groupname=group).returning(StudentToGroupPair),
                     "card.update": lambda id, **kwargs:
-                        update(Card).values(kwargs).where(Card.id == id).returning(Card)
+                        update(Card).values(kwargs).where(Card.id == id).returning(Card),
+                    "group.get.all": lambda:
+                        select(Group)
                 }
             ),
         "MockProvider": MockQueryProvider()

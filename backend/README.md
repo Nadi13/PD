@@ -11,3 +11,4 @@
 |`/api/overview`|sessionKey|?|GET   |*?*            |
 |`/api/card`|id, sessionKey|...|GET   |Получить карточку по его id|
 |`/api/card/update`|header: {sessionKey: String}, body: {id: Number (обязательно), status: String, comments: String, content: String}||PATCH|Послать обновлённые поля карточки (отметить как выполненное или отложенное, например)|
+|`/api/groups`||[name: str, description: str \| None]|GET|Получить список групп|

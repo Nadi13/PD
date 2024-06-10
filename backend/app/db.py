@@ -29,7 +29,6 @@ class SQLDBProvider(DataProvider):
             compiled_result.append(list())
             for object_ in item:
                 compiled_result[-1].append(*jsonable_encoder([object_]))
-        ic(compiled_result)
         return compiled_result
 
 class MockProvider(DataProvider):
@@ -102,9 +101,3 @@ class MockProvider(DataProvider):
 
     def query(self, query: str, *args, **kwargs) -> list[dict]:
         return self._queries[query]
-    
-    def commit(self) -> None:
-        return
-    
-    def rollback(self) -> None:
-        return
