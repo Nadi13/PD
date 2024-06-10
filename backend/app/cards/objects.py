@@ -12,7 +12,6 @@ class Lab(BaseModel):
     deadline: Optional[str]
 
 class Card(BaseModel):
-    id: int
     studentid: str
     labid: int
     content: str
@@ -23,7 +22,7 @@ class Card(BaseModel):
 
 class FullCard(BaseModel):
     id: int
-    studentid: str
+    student: User
     lab: Lab
     content: str
     comments: str

@@ -8,13 +8,32 @@ import axios from 'axios';
 const RequestList = () => {
     const [requests, setRequests] = useState<Array<{
         id: Int16Array,
-        studenid: string;
-        labid: string;
+        student: {
+          surname: string,
+          name: string,
+          patronymic: string,
+          username: string,
+          role: string
+        };
+        lab: {
+          id: Int16Array,
+          name: string,
+          description: string,
+          semester: number,
+          qroupname: string,
+          deadline: Date
+        };
         content: string;
         comments: string;
-        lecturerid: string;
         variant: Int16Array;
         info: {};
+        lecturer: {
+          surname: string,
+          name: string,
+          patronymic: string,
+          username: string,
+          role: string
+        };
         status: string;
         creationdate: Date;
     }>>([]);
@@ -30,13 +49,32 @@ const RequestList = () => {
 
           setRequests(requests.map((request) => ({
             id: request.id,
-            studenid: request.studentid,
-            labid: request.labid,
+            student: {
+              surname: request.student.surname,
+              name: request.student.name,
+              patronymic: request.student.patronymic,
+              username: request.student.username,
+              role: request.student.role
+            },
+            lab: {
+              id: request.lab.id,
+              name: request.lab.name,
+              description: request.lab.description,
+              semester: request.lab.semester,
+              qroupname: request.lab.groupname,
+              deadline: request.lab.deadline
+            },
             content: request.content,
             comments: request.comments,
-            lecturerid: request.lecturerid,
-            variant: request.variant,
+            variant: request.vatiant,
             info: request.info,
+            lecturer: {
+              surname: request.lecturer.surname,
+              name: request.lecturer.name,
+              patronymic: request.lecturer.patronymic,
+              username: request.lecturer.username,
+              role: request.lecturer.role
+            },
             status: request.status,
             creationdate: request.creationdate
           })));
@@ -44,19 +82,17 @@ const RequestList = () => {
 
         fetchRequests();
       }, []);
-
-
     return( <>
     <div className = {classes.container}>
         <div className={classes.wrap}>
             {requests.map((item) => 
                 <RequestCard
-                    name={item.name}
-                    number={item.number}
-                    work={item.work}
-                    course={item.course}
-                    date={item.date}
-                    deadline={item.deadline}
+                    name={`${item.student.surname} ${item.student.name} ${item.student.patronymic}`}
+                    number={item.lab.qroupname}
+                    work={item.lab.name}
+                    semester={item.lab.semester}
+                    date={item.creationdate}
+                    deadline={item.lab.deadline}
                     onClick={() => navigate("/LabInfo", {state: item})}
                 />
             )}
