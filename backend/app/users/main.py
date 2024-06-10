@@ -12,8 +12,6 @@ ROLES: Final[list[str]] = config["roles"].copy()
 PROVIDER: Final[str] = config["dataProvider"]
 
 async def get(id: str, session: AsyncSession, provider: DataProvider) -> Optional[User]:
-    #ic(config.get("dataProviderParameters", dict()), config["secrets"].get(str(provider), {}))
-    #provider = provider(**config.get("dataProviderParameters", dict()), **config["secrets"].get(PROVIDER, {}))
     if not (id and id.isalnum()):
         return None
     users: Sequence[dict[str, Any]] = await provider.query(Queries.get(PROVIDER, "user.get", id), session=session)

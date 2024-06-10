@@ -31,7 +31,14 @@ class FullCard(BaseModel):
     lecturer: User
     status: Literal["Accepted", "Declined", "Postponed", "Pending"]
     creationdate: str
+    subject: str
 
 class CreatedCard(Card):
     status: Literal["Accepted", "Declined", "Postponed", "Pending"]
     creationdate: str
+
+class CardUpdate(BaseModel):
+    id: int
+    content: Optional[str] = None
+    comments: Optional[str] = None
+    status: Literal["Accepted", "Declined", "Postponed", "Pending"] | None = None

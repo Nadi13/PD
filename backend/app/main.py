@@ -1,8 +1,8 @@
 from typing import Annotated, Any, Sequence, Type, TypeAlias
-from fastapi import FastAPI, Request, HTTPException, Response, Body, Depends
+from fastapi import FastAPI, Header, Request, HTTPException, Response, Body, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
-from cards.objects import Card, CreatedCard, FullCard
+from cards.objects import Card, CardUpdate, CreatedCard, FullCard
 import db
 from config import config
 import users.main as users
@@ -112,6 +112,10 @@ async def get_card(sessionKey: str, id: int, session: DBSession) -> FullCard:
     return response
 
 # teacher accepts, denies and leaves a comment to a lab request, otlozhenyye
-@app.put("/api/card/update")
-async def update_card():
-    raise NotImplementedError
+@app.patch("/api/card/update", status_code=status.HTTP_200_OK)
+async def update_card(update: CardUpdate, session: DBSession, sessionKey: Annotated[str | None, Header()] = None) -> str:
+    user = await users.get(sessionKey, session, data_provider)
+    if not user:
+        raise HTTPException(status_code=401, detail="User is unauthenticated")
+    response = await cards.update(update, session, data_provider)
+    return response

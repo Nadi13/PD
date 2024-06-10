@@ -1,5 +1,5 @@
 from typing import Any, Never, Callable, TypeAlias, TypeVar
-from sqlalchemy import insert, select
+from sqlalchemy import insert, select, update
 from sqlalchemy.orm import load_only, defer, aliased, selectin_polymorphic
 from users.db_objects import *
 from cards.db_objects import *
@@ -34,22 +34,26 @@ class Queries:
                     "user.add": lambda **kwargs:
                         insert(User).values(**kwargs).returning(User),
                     "card.get": lambda id: 
-                        select(Card, Lecturer := aliased(User), Student := aliased(User), Lab)\
+                        select(Card, Lecturer := aliased(User), Student := aliased(User), Lab, Subject.name)\
                         .where(Card.id == id)\
                         .join(Lecturer, Card.lecturerid == Lecturer.username)\
                         .join(Student, Card.studentid == Student.username)\
                         .join(Lab, Lab.id == Card.labid)\
+                        .join(Subject, Lab.subjectid == Subject.id)\
                         .options(defer(Lecturer.password), defer(Student.password)),
                     "card.get.all": lambda: 
-                        select(Card, Lecturer := aliased(User), Student := aliased(User), Lab)\
+                        select(Card, Lecturer := aliased(User), Student := aliased(User), Lab, Subject.name)\
                         .join(Lecturer, Card.lecturerid == Lecturer.username)\
                         .join(Student, Card.studentid == Student.username)\
                         .join(Lab, Lab.id == Card.labid)\
+                        .join(Subject, Lab.subjectid == Subject.id)\
                         .options(defer(Lecturer.password), defer(Student.password)),
                     "card.add": lambda **kwargs:
                         insert(Card).values(**kwargs).returning(Card),
                     "group.user.add": lambda username, group:
-                        insert(StudentToGroupPair).values(userid=username, groupname=group).returning(StudentToGroupPair)
+                        insert(StudentToGroupPair).values(userid=username, groupname=group).returning(StudentToGroupPair),
+                    "card.update": lambda id, **kwargs:
+                        update(Card).values(kwargs).where(Card.id == id).returning(Card)
                 }
             ),
         "MockProvider": MockQueryProvider()

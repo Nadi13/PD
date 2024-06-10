@@ -10,4 +10,4 @@
 |`/api/cards`|sessionKey, type (опционально)|[id: int, studentid: str, labid: int, content: str, comments: str, lecturerid: str, variant: int | None, info: dict[str, Any], status: str ("Accepted", "Declined", "Postponed", "Pending"), creationdate: str]|GET|Получить список карточек (лаб)|
 |`/api/overview`|sessionKey|?|GET   |*?*            |
 |`/api/card`|id, sessionKey|...|GET   |Получить карточку по его id|
-|`/api/card/update`|id, sessionKey, updated||PUT|Послать обновлённые поля карточки (отметить как выполненное или отложенное, например)|
+|`/api/card/update`|header: {sessionKey: String}, body: {id: Number (обязательно), status: String, comments: String, content: String}||PATCH|Послать обновлённые поля карточки (отметить как выполненное или отложенное, например)|
