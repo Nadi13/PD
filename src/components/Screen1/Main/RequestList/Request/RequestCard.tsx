@@ -10,9 +10,23 @@ const getRandomColor = () => {
 };
 
 
-const RequestCard = (props: { name: string, number: string, work: string, course: string, date: string, deadline?: boolean, onClick: () => void }) => {
+const RequestCard = (props: { name: string, number: string, work: string, semester: number, date: Date, deadline?: Date, onClick: () => void }) => {
 
     const randomColor = getRandomColor();
+
+    const date1 = new Date(props.date)
+
+    const week = date1.toLocaleDateString("ru-RU", { weekday: "short" });
+
+    const month = date1.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+
+
+    const timecreation = date1.toLocaleTimeString("ru-RU", { hour: "numeric", minute: "numeric" });
+
+    const semester1 = Math.ceil(props.semester / 2);
+
+
+    const formattedDate = `${week}, ${month}, ${timecreation}`;
 
     return <>
         <div className={classes.container} style={{ backgroundColor: props.deadline ? '#FFCFBA' : '#E9EAFF' }} onClick={props.onClick}>
@@ -25,17 +39,17 @@ const RequestCard = (props: { name: string, number: string, work: string, course
                 </div>
                 <div className={classes.info1}>
                     <div className={classes.name}>{props.name}</div>
-                    <div className={classes.work}>Лабораторная работа №{props.work}</div>
+                    <div className={classes.work}>{props.work}</div>
                 </div>
-                <div className={classes.info2}>{props.number.slice(0, -1)}
-                    <span className={classes.highlight}>{props.number.slice(-1)}</span>
+                <div className={classes.info2}>{props.number}
+                
                 </div>
                 </div>
                 <div className={classes.info3}>
-                    <div className={classes.course}>{props.course}</div>
+                    <div className={classes.course}> {semester1} курс, {props.semester} семестр</div>
                     <div className={classes.requestData}>
                         <div className={classes.text}>дата отправки:</div>
-                        <div className={classes.data}>{props.date}</div>
+                        <div className={classes.data}>{formattedDate}</div>
                     </div>
                 </div>
             </div>
