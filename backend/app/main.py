@@ -72,7 +72,7 @@ async def login(user: UserCredentials, response: Response) -> dict[str, Any]:
 # student sends new lab
 @app.put("/api/card/create", status_code=201)
 async def create_card(card: Card = Body()) -> str:
-    response = cards.add(**card)
+    response = cards.add(card, data_provider)
     if response == "Invalid value":
         raise HTTPException(status_code=400, detail=response)
     if response == "Internal error":
@@ -81,7 +81,7 @@ async def create_card(card: Card = Body()) -> str:
 
 # teacher gets labs list
 @app.get("/api/cards")
-async def cards_list(sessionKey: str) -> Sequence[CreatedCard]:
+async def cards_list(sessionKey: str) -> Sequence[FullCard]:
     user = users.get(sessionKey, data_provider)
     if not user:
         raise HTTPException(status_code=401, detail="User is unauthenticated")

@@ -12,7 +12,6 @@ class Lab(BaseModel):
     deadline: Optional[str]
 
 class Card(BaseModel):
-    id: int
     studentid: str
     labid: int
     content: str

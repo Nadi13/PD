@@ -19,11 +19,11 @@ class DataProvider(metaclass=abc.ABCMeta):
 
 # Implementations
 
-class SQLDBProvider(DataProvider, Disposable):
+class SQLDBProvider(DataProvider):
     def __init__(self, engine: str) -> None:
         super().__init__()
         self.engine = sql.create_engine(engine, echo=True)
-        self.db = self.engine.connect()
+        # self.db = self.engine.connect()
     
     def query(self, query: sql.Executable, *args, **kwargs) -> Sequence[dict[str, Any]]:
         with orm.Session(self.engine) as session:
@@ -38,15 +38,15 @@ class SQLDBProvider(DataProvider, Disposable):
             session.commit()
         return compiled_result
     
-    def dispose(self) -> None:
-        try:
-            self.db.close()
-        except (NameError, AttributeError):
-            pass
-        self.db = None
+    # def dispose(self) -> None:
+    #     try:
+    #         self.db.close()
+    #     except (NameError, AttributeError):
+    #         pass
+    #     self.db = None
     
-    def __del__(self) -> None:
-        self.dispose()
+    # def __del__(self) -> None:
+    #     self.dispose()
 
 class PostgreSQLProvider(SQLDBProvider):
     def __init__(self, login: str, password: str, location: str, database: str) -> None:

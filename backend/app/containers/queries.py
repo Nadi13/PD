@@ -40,7 +40,14 @@ class Queries:
                         .join(Student, Card.studentid == Student.username)\
                         .join(Lab, Lab.id == Card.labid)\
                         .options(defer(Lecturer.password), defer(Student.password)),
-                    "card.get.all": lambda: select(Card)
+                    "card.get.all": lambda: 
+                        select(Card, Lecturer := aliased(User), Student := aliased(User), Lab)\
+                        .join(Lecturer, Card.lecturerid == Lecturer.username)\
+                        .join(Student, Card.studentid == Student.username)\
+                        .join(Lab, Lab.id == Card.labid)\
+                        .options(defer(Lecturer.password), defer(Student.password)),
+                    "card.add": lambda **kwargs:
+                        insert(Card).values(**kwargs).returning(Card)
                 }
             ),
         "MockProvider": MockQueryProvider()
