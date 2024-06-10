@@ -1,5 +1,6 @@
 import json
 from typing import Any, Final
+from icecream import ic
 
 
 def __get_config() -> dict[str, Any]:
@@ -15,3 +16,4 @@ def __get_config() -> dict[str, Any]:
 
 
 config: Final[dict[str, Any]] = __get_config()
+ic(config)

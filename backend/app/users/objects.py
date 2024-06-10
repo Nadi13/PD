@@ -1,3 +1,4 @@
+from typing import Any, Literal, Optional
 from pydantic import BaseModel
 
 
@@ -14,5 +15,15 @@ class User(Person):
     username: str
     role: str
 
+class ExtendedEntity(BaseModel):
+    info: Optional[dict[str, Any]] = None
+
 class UserWithCredentials(User, UserCredentials):
-    password: str
+    pass
+
+class RegistrationEntity(UserWithCredentials, ExtendedEntity):
+    pass
+
+class StudentWithCredentials(UserWithCredentials):
+    role: Literal["student"]
+    group: str
