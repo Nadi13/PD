@@ -1,4 +1,5 @@
 import classes from './RequestCard.module.scss'
+import strings from '../../../../../myTools/strings.tsx';
 
 const getRandomColor = () => {
 
@@ -23,7 +24,7 @@ const RequestCard = (props: { name: string, number: string, work: string, semest
 
     const timecreation = date1.toLocaleTimeString("ru-RU", { hour: "numeric", minute: "numeric" });
 
-    const semester1 = Math.ceil(props.semester / 2);
+    const course = Math.ceil(props.semester / 2);
 
 
     const formattedDate = `${week}, ${month}, ${timecreation}`;
@@ -46,9 +47,9 @@ const RequestCard = (props: { name: string, number: string, work: string, semest
                 </div>
                 </div>
                 <div className={classes.info3}>
-                    <div className={classes.course}> {semester1} курс, {props.semester} семестр</div>
+                    <div className={classes.course}> {course} {strings.Course}, {props.semester} {strings.Semestr}</div>
                     <div className={classes.requestData}>
-                        <div className={classes.text}>дата отправки:</div>
+                        <div className={classes.text}>{strings.Data1}</div>
                         <div className={classes.data}>{formattedDate}</div>
                     </div>
                 </div>

@@ -5,28 +5,36 @@ import { useLocation } from "react-router-dom";
 const LabInfo = () => {
     const location = useLocation();
     const selectedRequest = location.state;
+    const course = Math.ceil(selectedRequest.lab.semester / 2);
+
+    const date1 = new Date(selectedRequest.creationdate)
+    const week = date1.toLocaleDateString("ru-RU", { weekday: "short" });
+    const month = date1.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+    const timecreation = date1.toLocaleTimeString("ru-RU", { hour: "numeric", minute: "numeric" });
+    const formattedDate = `${week}, ${month}, ${timecreation}`;
+
     return <>
         <div className = {css.container}>
             <div className = {css.info}>
                 <div className = {css.student}>
-                    <div className = {css.circle}>{selectedRequest.name.split(" ")[0].charAt(0)}</div>
-                    <div className = {css.fio}>{selectedRequest.name}</div>
-                    <div className = {css.group}>{selectedRequest.number}</div>
-                    <div className = {css.course}>{selectedRequest.course}</div>
+                    <div className = {css.circle}>{selectedRequest.student.surname.split(" ")[0].charAt(0)}</div>
+                    <div className = {css.fio}>{`${selectedRequest.student.surname} ${selectedRequest.student.name} ${selectedRequest.student.patronymic}`}</div>
+                    <div className = {css.group}>{selectedRequest.lab.qroupname}</div>
+                    <div className = {css.course}>{course} {strings.Course}, {selectedRequest.lab.semester} {strings.Semestr}</div>
                 </div>
                 <div className = {css.work}>
-                    <div className = {css.lab}>Лабораторная работа №{selectedRequest.work}</div>
-                    <div className= {css.variant}>{strings.Variant}</div>
+                    <div className = {css.lab}>{selectedRequest.lab.name}</div>
+                    <div className= {css.variant}>{strings.Variant} {selectedRequest.variant}</div>
                 </div>
-                <div className = {css.description}>{strings.Description}</div>
+                <div className = {css.description}>{selectedRequest.lab.description}</div>
                 <div className = {css.content}>
                     {strings.Content}
                     <div className = {css.text}>
                         {strings.Data1}
-                        <div className = {css.data}> {selectedRequest.date}</div>
+                        <div className = {css.data}> {formattedDate }</div>
                     </div>
                 </div>
-                <div className = {css.box}></div>
+                <div className = {css.box}>{selectedRequest.content}</div>
                 <div className = {css.git}>
                     <div className = {css.text1}>
                         {strings.Percent}

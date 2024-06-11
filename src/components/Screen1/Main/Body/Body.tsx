@@ -10,7 +10,7 @@ const Body = () => {
             <RequestPanel />
             <div className = {classes.content}>
                 <Menu/>
-                <RequestList />
+                <RequestList status={''} />
             </div>
         </div>
     </>

@@ -3,9 +3,10 @@ import RequestCard from './Request/RequestCard'
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
+import PanelCard from '../RequestPanel/PanelCard/PanelCard';
 
 
-const RequestList = () => {
+const RequestList = (props: {status: string}) => {
     const [requests, setRequests] = useState<Array<{
         id: Int16Array,
         student: {
@@ -39,6 +40,12 @@ const RequestList = () => {
     }>>([]);
     const navigate = useNavigate();
 
+    const [selectedStatus, setSelectedStatus] = useState("Pending");
+
+    const handleStatusChange = (newStatus: string) => {
+      setSelectedStatus(newStatus);
+    };
+
     useEffect(() => {
         const fetchRequests = async () => {
           const { data } = await axios.get(
@@ -66,7 +73,7 @@ const RequestList = () => {
             },
             content: request.content,
             comments: request.comments,
-            variant: request.vatiant,
+            variant: request.variant,
             info: request.info,
             lecturer: {
               surname: request.lecturer.surname,
@@ -85,7 +92,7 @@ const RequestList = () => {
     return( <>
     <div className = {classes.container}>
         <div className={classes.wrap}>
-            {requests.map((item) => 
+            {requests.filter((request) => request.status === selectedStatus).map((item) => 
                 <RequestCard
                     name={`${item.student.surname} ${item.student.name} ${item.student.patronymic}`}
                     number={item.lab.qroupname}
