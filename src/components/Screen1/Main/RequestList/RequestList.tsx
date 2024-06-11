@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState} from "react";
 import axios from 'axios';
 
-const RequestList = (props: {status: string}) => {
+const RequestList = (props: {status: string, sesKey: string}) => {
     const [requests, setRequests] = useState<Array<{
         id: Int16Array,
         student: {
@@ -38,13 +38,16 @@ const RequestList = (props: {status: string}) => {
     }>>([]);
     const navigate = useNavigate();
 
+    console.log(`http://127.0.0.1:8000/api/card?sessionKey=${props.sesKey}`)
+
     useEffect(() => {
         const fetchRequests = async () => {
           const { data } = await axios.get(
-            "http://127.0.0.1:8000/api/card?sessionKey=dcc7efc0-c1fe-4397-920c-ffa701f00d48"
+            `http://127.0.0.1:8000/api/card?sessionKey=${props.sesKey}`
           );
           const requests = Object.values(data) as any[];
           console.log(requests)
+          console.log(props.sesKey)
 
           setRequests(requests.map((request) => ({
             id: request.id,

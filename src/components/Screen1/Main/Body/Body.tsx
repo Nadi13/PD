@@ -5,7 +5,7 @@ import classes from './Body.module.scss';
 import Menu from '../../../Screen2/Menu/Menu.tsx';
 import {useState, useEffect } from "react";
 
-const Body = () => {
+const Body = (props : {key1: string}) => {
     const [selectedStatus, setSelectedStatus] = useState(localStorage.getItem("selectedStatus") || "Pending");
     const handleStatusChange = (newStatus: string) => {
         setSelectedStatus(newStatus);
@@ -15,6 +15,7 @@ const Body = () => {
     useEffect(() => {
         localStorage.setItem("selectedStatus", selectedStatus);
     }, [selectedStatus]);
+    console.log(typeof props.key1)
     return <>
         <div className={classes.container}>
         <div className = {css.content}>
@@ -37,7 +38,7 @@ const Body = () => {
             </div>
             <div className = {classes.content}>
                     <Menu/>
-                    <RequestList status={selectedStatus}/>
+                    <RequestList status={selectedStatus} sesKey = {props.key1}/>
             </div>
         </div>
     </>

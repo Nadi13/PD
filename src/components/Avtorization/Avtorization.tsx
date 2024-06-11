@@ -2,44 +2,31 @@ import React, { useState } from "react";
 import css from './Avtorization.module.scss'
 import strings from '../../myTools/strings.tsx';
 import { useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const submitForm = async () => {
-    const response = await axios.post(
-      "http://127.0.0.1:8000/api/user/login",
-      {"username": "freedownload22", "password": "bdjhbhDAshjdk"}
-    )
-
-    if (response && response.status === 200) {
-      console.log(response);
-    } else {
-      console.log("error");
-    }
-  };
-
-  const handleLogin = async () => {
-    console.log('gggg')
+  const handleLogin = async (e:React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     const response = await fetch('http://127.0.0.1:8000/api/user/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
     });
-    
+
     const data = await response.json();
-    
-    if (data.authenticated) {
-        console.log('success')
+
+    if (response.status === 200) {
+      navigate('/Main', { state: { user: data } });
     } else {
-        // Handle failed authentication
+      setError("Incorrect username or password");
     }
 };
-
-  console.log(handleLogin)
 
   return (
         <div className = {css.container}>
