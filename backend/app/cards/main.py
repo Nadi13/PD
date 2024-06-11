@@ -10,7 +10,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 PROVIDER: Final[str] = config["dataProvider"]
 
 async def get(card: CardQuery, session: AsyncSession, provider: DataProvider) -> Optional[FullCard]:
-    cards: Sequence[Sequence[dict[str, Any]]] = await provider.query(Queries.get(PROVIDER, "card.get", card.model_dump(exclude_none=True, exclude=["sessionKey"])), session=session)
+    cards: Sequence[Sequence[dict[str, Any]]] = await provider.query(
+        Queries.get(
+            PROVIDER,
+            "card.get",
+            card.model_dump(exclude_none=True, exclude=["sessionKey"])
+        ),
+        session=session
+    )
     if not cards:
         return None
     return [

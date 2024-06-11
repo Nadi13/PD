@@ -1,3 +1,3 @@
-from .queries import Queries
+from .queries import Queries, SQLQueryProvider
 
-__all__ = ["Queries"]
+__all__ = ["Queries", "SQLQueryProvider"]

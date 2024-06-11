@@ -10,12 +10,12 @@ class SessionManager(Disposable):
         self._engine: sqla.AsyncEngine = sqla.create_async_engine(f"postgresql+asyncpg://{login}:{password}@{location}/{database}", echo=True)
         self._sessionmaker = sqla.async_sessionmaker(autocommit=False, bind=self._engine)
     
+    @asynccontextmanager
     async def connect(self) -> AsyncIterator[sqla.AsyncConnection]:
         async with self._engine.begin() as connection:
             try:
                 yield connection
             except Exception as e:
-                ic("Exception:", e)
                 await connection.rollback()
                 raise
     
@@ -25,7 +25,6 @@ class SessionManager(Disposable):
         try:
             yield session
         except Exception as e:
-            ic("Exception", e)
             await session.rollback()
             raise
         finally:

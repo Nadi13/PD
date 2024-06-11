@@ -52,8 +52,3 @@ class Group(DBObject):
 
     name: Mapped[str] = mapped_column(sql.Text, primary_key=True)
     description: Mapped[Optional[str]] = mapped_column(sql.Text, nullable=True)
-
-#class Student(DBObject):
-#    __tablename__ = "students"
-#
-#    username: Mapped[str] = mapped_column(sql.String(32), sql.ForeignKey("users.username"), primary_key=True)
