@@ -2,7 +2,7 @@ from typing import Annotated, Any, Sequence, Type, TypeAlias
 from fastapi import FastAPI, Header, Request, HTTPException, Response, Body, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
-from cards.objects import Card, CardUpdate, CreatedCard, FullCard
+from cards.objects import Card, CardQuery, CardUpdate, CreatedCard, FullCard
 import db
 from config import config
 import users.main as users
@@ -29,8 +29,9 @@ def __initialize() -> None:
 __initialize()
 
 DBSession: TypeAlias  = Annotated[AsyncSession, Depends(sessionmanager.with_session)]
+SessionKeyHeader: TypeAlias = Annotated[str | None, Header()]
 
-app = FastAPI()
+app = FastAPI(root_path="/api")
 
 app.add_middleware( # to reconsider
     CORSMiddleware,
@@ -54,14 +55,14 @@ async def root():
 ''')
 
 
-@app.get("/api/user")
+@app.get("/user")
 async def get_user(sessionKey: str, session: DBSession) -> User:
     response = await users.get(sessionKey, session, data_provider)
     if not response:
         raise HTTPException(status_code=401, detail="User is unauthenticated")
     return response
 
-@app.post("/api/user/register")
+@app.post("/user/register")
 async def register_user(session: DBSession, user: RegistrationEntity = Body()) -> str:
     response = await users.add(user, session, data_provider)
     if response == "Invalid value":
@@ -70,15 +71,17 @@ async def register_user(session: DBSession, user: RegistrationEntity = Body()) -
         raise HTTPException(status_code=500, detail=response)
     return response
 
-@app.post("/api/user/login")
+@app.post("/user/login")
 async def login(user: UserCredentials, response: Response) -> dict[str, Any]:
     #temp
     # response.set_cookie("sessionKey", "123")
     return {"message": "Login successful"}
 
-# student sends new lab
-@app.put("/api/card/create", status_code=201)
-async def create_card(session: DBSession, card: Card = Body()) -> str:
+@app.put("/card/create", status_code=201)
+async def create_card(session: DBSession, card: Card = Body(), sessionKey: SessionKeyHeader = None) -> str:
+    user = await users.get(sessionKey, session, data_provider)
+    if not user:
+        raise HTTPException(status_code=401, detail="User is unauthenticated")
     response = await cards.add(card, session, data_provider)
     if response == "Invalid value":
         raise HTTPException(status_code=400, detail=response)
@@ -86,8 +89,7 @@ async def create_card(session: DBSession, card: Card = Body()) -> str:
         raise HTTPException(status_code=500, detail=response)
     return response
 
-# teacher gets labs list
-@app.get("/api/cards")
+@app.get("/cards")
 async def cards_list(sessionKey: str, session: DBSession) -> Sequence[FullCard]:
     user = await users.get(sessionKey, session, data_provider)
     if not user:
@@ -95,27 +97,29 @@ async def cards_list(sessionKey: str, session: DBSession) -> Sequence[FullCard]:
     response = await cards.get_all(data_provider, session)
     return response
 
-# teacher gets preview numbers
-@app.get("/api/overview")
+@app.get("/overview")
 async def overview():
     raise NotImplementedError
 
-# teacher gets a lab
-@app.get("/api/card")
-async def get_card(sessionKey: str, id: int, session: DBSession) -> FullCard:
+@app.get("/card")
+async def get_card(session: DBSession, sessionKey: str, card: Annotated[CardQuery, Depends()]) -> Sequence[FullCard]:
     user = await users.get(sessionKey, session, data_provider)
     if not user:
         raise HTTPException(status_code=401, detail="User is unauthenticated")
-    response = await cards.get(id, session, data_provider)
+    response = await cards.get(card, session, data_provider)
     if not response:
         raise HTTPException(status_code=400, detail="Card does not exist")
     return response
 
-# teacher accepts, denies and leaves a comment to a lab request, otlozhenyye
-@app.patch("/api/card/update", status_code=status.HTTP_200_OK)
-async def update_card(update: CardUpdate, session: DBSession, sessionKey: Annotated[str | None, Header()] = None) -> str:
+@app.patch("/card/update", status_code=status.HTTP_200_OK)
+async def update_card(update: CardUpdate, session: DBSession, sessionKey: SessionKeyHeader = None) -> str:
     user = await users.get(sessionKey, session, data_provider)
     if not user:
         raise HTTPException(status_code=401, detail="User is unauthenticated")
     response = await cards.update(update, session, data_provider)
     return response
+
+@app.get("/groups", status_code=status.HTTP_200_OK)
+async def get_groups(session: DBSession) -> Sequence[Group]:
+    groups = await users.get_all_groups(session, data_provider)
+    return groups

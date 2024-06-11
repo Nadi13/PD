@@ -9,18 +9,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 PROVIDER: Final[str] = config["dataProvider"]
 
-async def get(id: int, session: AsyncSession, provider: DataProvider) -> Optional[FullCard]:
-    cards: Sequence[Sequence[dict[str, Any]]] = await provider.query(Queries.get(PROVIDER, "card.get", id), session=session)
+async def get(card: CardQuery, session: AsyncSession, provider: DataProvider) -> Optional[FullCard]:
+    cards: Sequence[Sequence[dict[str, Any]]] = await provider.query(Queries.get(PROVIDER, "card.get", card.model_dump(exclude_none=True, exclude=["sessionKey"])), session=session)
     if not cards:
         return None
-    card = cards[0]
-    return FullCard(
-        **(card[0]),
-        lecturer=User(**(card[1])),
-        student=User(**(card[2])),
-        lab=Lab(**(card[3])),
-        subject=card[4]
-    )
+    return [
+        FullCard(
+            **(card[0]),
+            lecturer=User(**(card[1])),
+            student=User(**(card[2])),
+            lab=Lab(**(card[3])),
+            subject=card[4]
+        )
+        for card in cards
+    ]
 
 async def get_all(provider: DataProvider, session: AsyncSession) -> Sequence[FullCard]:
     cards: Sequence[Sequence[CreatedCard]] = await provider.query(Queries.get(PROVIDER, "card.get.all"), session=session)
