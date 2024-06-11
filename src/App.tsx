@@ -12,8 +12,8 @@ function App() {
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
-            <Route path="/log" element={<Login />} />
-            <Route path="/" element={<Main />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/Main" element={<Main />} />
             <Route path="/LabInfo" element={<Main2 />} />
           </Routes>
       </BrowserRouter>
