@@ -102,7 +102,7 @@ async def cards_list(sessionKey: str, session: DBSession) -> Sequence[FullCard]:
 
 @app.get("/overview")
 async def overview():
-    raise NotImplementedError
+    HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 @app.get("/card")
 async def get_card(session: DBSession, sessionKey: str, card: Annotated[CardQuery, Depends()]) -> Sequence[FullCard]:
