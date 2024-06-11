@@ -1,3 +1,4 @@
+import string
 from typing import Any, Final, Hashable, Literal, Optional, Sequence, TypeAlias
 from db import DataProvider
 from containers.queries import Queries
@@ -10,9 +11,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 ROLES: Final[list[str]] = config["roles"].copy()
 PROVIDER: Final[str] = config["dataProvider"]
+ALLOWED_CHARS: Final[set[str]] = set(string.ascii_lowercase + string.digits + "-")
+
+def _validate_session_key(key: str) -> bool:
+    return ALLOWED_CHARS.issuperset(set(key))
 
 async def get(id: str, session: AsyncSession, provider: DataProvider) -> Optional[User]:
-    if not (id and id.isalnum()):
+    if not (id and _validate_session_key(id)):
         return None
     users: Sequence[dict[str, Any]] = await provider.query(Queries.get(PROVIDER, "user.get", id), session=session)
     if not users:
