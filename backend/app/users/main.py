@@ -15,7 +15,6 @@ async def get(id: str, session: AsyncSession, provider: DataProvider) -> Optiona
     if not (id and id.isalnum()):
         return None
     users: Sequence[dict[str, Any]] = await provider.query(Queries.get(PROVIDER, "user.get", id), session=session)
-    session.commit()
     if not users:
         return None
     return User(**users[0][0])

@@ -2,7 +2,7 @@ from typing import Annotated, Any, Sequence, Type, TypeAlias
 from fastapi import FastAPI, Header, Request, HTTPException, Response, Body, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
-from cards.objects import Card, CardUpdate, CreatedCard, FullCard
+from cards.objects import Card, CardQuery, CardUpdate, CreatedCard, FullCard
 import db
 from config import config
 import users.main as users
@@ -102,11 +102,11 @@ async def overview():
     raise NotImplementedError
 
 @app.get("/card")
-async def get_card(sessionKey: str, id: int, session: DBSession) -> FullCard:
+async def get_card(session: DBSession, sessionKey: str, card: Annotated[CardQuery, Depends()]) -> Sequence[FullCard]:
     user = await users.get(sessionKey, session, data_provider)
     if not user:
         raise HTTPException(status_code=401, detail="User is unauthenticated")
-    response = await cards.get(id, session, data_provider)
+    response = await cards.get(card, session, data_provider)
     if not response:
         raise HTTPException(status_code=400, detail="Card does not exist")
     return response

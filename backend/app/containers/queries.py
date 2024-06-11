@@ -33,9 +33,9 @@ class Queries:
                         .options(load_only(User.username, User.surname, User.name, User.patronymic, User.role)),
                     "user.add": lambda **kwargs:
                         insert(User).values(**kwargs).returning(User),
-                    "card.get": lambda id: 
+                    "card.get": lambda conditions: 
                         select(Card, Lecturer := aliased(User), Student := aliased(User), Lab, Subject.name)\
-                        .where(Card.id == id)\
+                        .filter_by(**conditions)\
                         .join(Lecturer, Card.lecturerid == Lecturer.username)\
                         .join(Student, Card.studentid == Student.username)\
                         .join(Lab, Lab.id == Card.labid)\
