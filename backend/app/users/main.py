@@ -41,6 +41,21 @@ def _validate_role(user: RegistrationEntity) -> bool:
             return False
     return True
 
+async def get_by_credentials(credentials: UserCredentials, session: AsyncSession, provider: DataProvider) -> Literal["Invalid value", "Success", "Internal error", "Nonexistent value"]:
+    if not (_validate_username(credentials.username) and _validate_password(credentials.password)):
+        return "Invalid value"
+    response = await provider.query(
+        Queries.get(
+            PROVIDER,
+            "user.get.by.credentials",
+            username=credentials.username,
+            password=sha256(credentials.password.encode()).hexdigest()
+        ),
+        session=session
+    )
+    if not response:
+        return "Nonexistent value"
+    return "Success"
 
 async def add(user: RegistrationEntity, session: AsyncSession, provider: DataProvider) -> Literal["Invalid value", "Success", "Internal error"]:
     if not (_validate_username(user.username) and _validate_password(user.password) and _validate_user(user) and _validate_role(user)):
@@ -80,3 +95,15 @@ async def get_all_groups(session: AsyncSession, provider: DataProvider) -> Seque
         session=session
     )
     return [Group(**item[0]) for item in groups]
+
+async def get_new_session(user: UserCredentials, db_session: AsyncSession, provider: DataProvider) -> SessionKey:
+    response = await provider.query(
+        Queries.get(
+            PROVIDER,
+            "session.key.add",
+            username=user.username
+        ),
+        session=db_session
+    )
+    await db_session.commit()
+    return SessionKey(sessionKey=response[0][0]["id"])

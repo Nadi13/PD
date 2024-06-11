@@ -24,7 +24,6 @@ class SQLDBProvider(DataProvider):
     async def query(self, query: sql.Executable, *args, **kwargs) -> Sequence[dict[str, Any]]:
         session: sqla.AsyncSession = kwargs["session"]
         result: Sequence[Any] = (await session.execute(query, kwargs)).all()
-        ic(query)
         compiled_result: list[list[dict[str, Any]]] = []
         for item in result:
             compiled_result.append(list())
