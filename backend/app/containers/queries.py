@@ -55,7 +55,11 @@ class Queries:
                     "card.update": lambda id, **kwargs:
                         update(Card).values(kwargs).where(Card.id == id).returning(Card),
                     "group.get.all": lambda:
-                        select(Group)
+                        select(Group),
+                    "user.get.by.credentials": lambda username, password:
+                        select(User).filter_by(username=username, password=password),
+                    "session.key.add": lambda username:
+                        insert(Session).values(userid=username, isactive=True).returning(Session)
                 }
             ),
         "MockProvider": MockQueryProvider()

@@ -30,6 +30,7 @@ __initialize()
 
 DBSession: TypeAlias  = Annotated[AsyncSession, Depends(sessionmanager.with_session)]
 SessionKeyHeader: TypeAlias = Annotated[str | None, Header()]
+Message: TypeAlias = dict[str, str]
 
 app = FastAPI(root_path="/api")
 
@@ -72,10 +73,12 @@ async def register_user(session: DBSession, user: RegistrationEntity = Body()) -
     return response
 
 @app.post("/user/login")
-async def login(user: UserCredentials, response: Response) -> dict[str, Any]:
-    #temp
-    # response.set_cookie("sessionKey", "123")
-    return {"message": "Login successful"}
+async def login(user: UserCredentials, session: DBSession) -> Message | SessionKey:
+    response = await users.get_by_credentials(user, session, data_provider)
+    if response in ["Invalid value", "Nonexistent value"]:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=response)
+    session_key = await users.get_new_session(user, session, data_provider)
+    return session_key
 
 @app.put("/card/create", status_code=201)
 async def create_card(session: DBSession, card: Card = Body(), sessionKey: SessionKeyHeader = None) -> str:
@@ -99,7 +102,7 @@ async def cards_list(sessionKey: str, session: DBSession) -> Sequence[FullCard]:
 
 @app.get("/overview")
 async def overview():
-    raise NotImplementedError
+    HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 @app.get("/card")
 async def get_card(session: DBSession, sessionKey: str, card: Annotated[CardQuery, Depends()]) -> Sequence[FullCard]:

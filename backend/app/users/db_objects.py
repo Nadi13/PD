@@ -17,7 +17,7 @@ class User(DBObject):
 class Session(DBObject):
     __tablename__ = "sessions"
 
-    id: Mapped[str] = mapped_column(sql.CHAR(64), primary_key=True)
+    id: Mapped[str] = mapped_column(sql.Uuid, primary_key=True, server_default="gen_random_uuid()")
     userid: Mapped[str] = mapped_column(sql.String(32), sql.ForeignKey("users.username"))
     isactive: Mapped[bool] = mapped_column(default=True)
 

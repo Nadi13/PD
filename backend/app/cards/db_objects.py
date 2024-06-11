@@ -35,4 +35,3 @@ class Subject(DBObject):
 
     id: Mapped[int] = mapped_column(sql.Integer, primary_key=True)
     name: Mapped[str] = mapped_column(sql.Text, unique=True)
-    
