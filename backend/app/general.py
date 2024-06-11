@@ -1,6 +1,7 @@
 from typing import Any
 from abc import ABCMeta, abstractmethod
 from sqlalchemy.orm import DeclarativeBase
+from pydantic import BaseModel
 
 
 class Disposable(metaclass=ABCMeta):

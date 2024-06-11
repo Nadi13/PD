@@ -1,3 +1,4 @@
+import string
 from typing import Any, Final, Hashable, Literal, Optional, Sequence, TypeAlias
 from db import DataProvider
 from containers.queries import Queries
@@ -10,9 +11,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 ROLES: Final[list[str]] = config["roles"].copy()
 PROVIDER: Final[str] = config["dataProvider"]
+ALLOWED_CHARS: Final[set[str]] = set(string.ascii_lowercase + string.digits + "-")
+
+def _validate_session_key(key: str) -> bool:
+    return ALLOWED_CHARS.issuperset(set(key))
 
 async def get(id: str, session: AsyncSession, provider: DataProvider) -> Optional[User]:
-    if not (id and id.isalnum()):
+    if not (id and _validate_session_key(id)):
         return None
     users: Sequence[dict[str, Any]] = await provider.query(Queries.get(PROVIDER, "user.get", id), session=session)
     if not users:
@@ -41,6 +46,21 @@ def _validate_role(user: RegistrationEntity) -> bool:
             return False
     return True
 
+async def get_by_credentials(credentials: UserCredentials, session: AsyncSession, provider: DataProvider) -> Literal["Invalid value", "Success", "Internal error", "Nonexistent value"]:
+    if not (_validate_username(credentials.username) and _validate_password(credentials.password)):
+        return "Invalid value"
+    response = await provider.query(
+        Queries.get(
+            PROVIDER,
+            "user.get.by.credentials",
+            username=credentials.username,
+            password=sha256(credentials.password.encode()).hexdigest()
+        ),
+        session=session
+    )
+    if not response:
+        return "Nonexistent value"
+    return "Success"
 
 async def add(user: RegistrationEntity, session: AsyncSession, provider: DataProvider) -> Literal["Invalid value", "Success", "Internal error"]:
     if not (_validate_username(user.username) and _validate_password(user.password) and _validate_user(user) and _validate_role(user)):
@@ -80,3 +100,15 @@ async def get_all_groups(session: AsyncSession, provider: DataProvider) -> Seque
         session=session
     )
     return [Group(**item[0]) for item in groups]
+
+async def get_new_session(user: UserCredentials, db_session: AsyncSession, provider: DataProvider) -> SessionKey:
+    response = await provider.query(
+        Queries.get(
+            PROVIDER,
+            "session.key.add",
+            username=user.username
+        ),
+        session=db_session
+    )
+    await db_session.commit()
+    return SessionKey(sessionKey=response[0][0]["id"])

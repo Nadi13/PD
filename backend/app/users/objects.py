@@ -31,3 +31,6 @@ class StudentWithCredentials(UserWithCredentials):
 class Group(BaseModel):
     name: str
     description: Optional[str]
+
+class SessionKey(BaseModel):
+    sessionKey: str
