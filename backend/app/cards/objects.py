@@ -20,6 +20,14 @@ class Card(BaseModel):
     variant: Optional[int] = None
     info: dict[str, Any]
 
+class CardQuery(BaseModel):
+    id: Optional[int] = None
+    studentid: Optional[str] = None
+    labid: Optional[int] = None
+    content: Optional[str] = None
+    comments: Optional[str] = None
+    lecturerid: Optional[str] = None
+
 class FullCard(BaseModel):
     id: int
     student: User

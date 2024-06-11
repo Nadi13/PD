@@ -16,4 +16,3 @@ def __get_config() -> dict[str, Any]:
 
 
 config: Final[dict[str, Any]] = __get_config()
-ic(config)
