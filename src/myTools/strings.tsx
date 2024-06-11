@@ -35,7 +35,7 @@ const strings = {
     Login: "Логин",
     Password: "Пароль",
     Registration: "Регистрация",
-    Into: "Вход"
+    Into: "Войти"
 };
 
 export default strings;

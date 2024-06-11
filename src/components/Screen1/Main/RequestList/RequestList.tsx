@@ -41,7 +41,7 @@ const RequestList = (props: {status: string}) => {
     useEffect(() => {
         const fetchRequests = async () => {
           const { data } = await axios.get(
-            "http://127.0.0.1:8000/api/cards?sessionKey=123"
+            "http://127.0.0.1:8000/api/card?sessionKey=dcc7efc0-c1fe-4397-920c-ffa701f00d48"
           );
           const requests = Object.values(data) as any[];
           console.log(requests)

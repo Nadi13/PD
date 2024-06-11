@@ -1,19 +1,90 @@
+body {
+    background-color: rgba(242, 243, 255, 1);
+}
 .container {
-    display: flex;
-    justify-content: center;
-    height: 423px;
-    width: 587px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    height: 423px;
+    width: 587px;
     border: 1px solid black;
     border-radius: 5px;
+    background-color: white;
 
-    .form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            margin-top: 20px;
+
+            .textBlock {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 240px;
+                height: 62px;
+                gap: 5px;
+                margin: 0;
+
+                .title {
+                    font-weight: 700;
+                    font-size: 32px;
+                    line-height: 38px;
+                }
+
+                .subtitle {
+                    font-weight: 400;
+                    font-size: 13px;
+                    line-height: 15px;
+                    color: #000000;
+                }
+            }
+
+            .block {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                .login {
+                    width: 445px;
+                    height: 40px;
+                    border: 1px solid black;
+                    border-radius: 3px;
+                    border-color: #909090;
+                }
+            }
+
+            .choice {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                gap: 100px;
+                margin-top: 20px;
+
+                .reg {
+                    width: 89px;
+                    height: 19px;
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 16px;
+                    border: none;
+                }
+
+                .logIn {
+                    width: 183px;
+                    height: 45px;
+                    border-radius: 6px;
+                    background-color: #535353;
+
+                    font-weight: 400;
+                    font-size: 12px;
+                    line-height: 14px;
+                    color: #FFFFFF;
+                }
+            }
+        }
     }
-}
