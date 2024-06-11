@@ -77,7 +77,6 @@ async def login(user: UserCredentials, response: Response) -> dict[str, Any]:
     # response.set_cookie("sessionKey", "123")
     return {"message": "Login successful"}
 
-# student sends new lab
 @app.put("/card/create", status_code=201)
 async def create_card(session: DBSession, card: Card = Body(), sessionKey: SessionKeyHeader = None) -> str:
     user = await users.get(sessionKey, session, data_provider)
@@ -90,7 +89,6 @@ async def create_card(session: DBSession, card: Card = Body(), sessionKey: Sessi
         raise HTTPException(status_code=500, detail=response)
     return response
 
-# teacher gets labs list
 @app.get("/cards")
 async def cards_list(sessionKey: str, session: DBSession) -> Sequence[FullCard]:
     user = await users.get(sessionKey, session, data_provider)
@@ -99,12 +97,10 @@ async def cards_list(sessionKey: str, session: DBSession) -> Sequence[FullCard]:
     response = await cards.get_all(data_provider, session)
     return response
 
-# teacher gets preview numbers
 @app.get("/overview")
 async def overview():
     raise NotImplementedError
 
-# teacher gets a lab
 @app.get("/card")
 async def get_card(sessionKey: str, id: int, session: DBSession) -> FullCard:
     user = await users.get(sessionKey, session, data_provider)
@@ -115,7 +111,6 @@ async def get_card(sessionKey: str, id: int, session: DBSession) -> FullCard:
         raise HTTPException(status_code=400, detail="Card does not exist")
     return response
 
-# teacher accepts, denies and leaves a comment to a lab request, otlozhenyye
 @app.patch("/card/update", status_code=status.HTTP_200_OK)
 async def update_card(update: CardUpdate, session: DBSession, sessionKey: SessionKeyHeader = None) -> str:
     user = await users.get(sessionKey, session, data_provider)
