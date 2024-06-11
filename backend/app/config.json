@@ -1,10 +1,11 @@
 {
-    "dataProvider": "PostgreSQLProvider",
-    "dataProviderParameters": {
-        "location": "95.189.160.158:34452",
+    "dataProvider": "SQLDBProvider",
+    "sessionManagerParameters": {
+        "location": "localhost:25683",
         "database": "postgres"
     },
     "roles": [
-        "student"
+        "student",
+        "lecturer"
     ]
 }
