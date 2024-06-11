@@ -16,17 +16,10 @@ const RequestCard = (props: { name: string, number: string, work: string, semest
     const randomColor = getRandomColor();
 
     const date1 = new Date(props.date)
-
     const week = date1.toLocaleDateString("ru-RU", { weekday: "short" });
-
     const month = date1.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
-
-
     const timecreation = date1.toLocaleTimeString("ru-RU", { hour: "numeric", minute: "numeric" });
-
     const course = Math.ceil(props.semester / 2);
-
-
     const formattedDate = `${week}, ${month}, ${timecreation}`;
 
     return <>

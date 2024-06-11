@@ -1,7 +1,7 @@
 {
     "dataProvider": "SQLDBProvider",
     "sessionManagerParameters": {
-        "location": "localhost:25683",
+        "location": "95.189.160.158:34452",
         "database": "postgres"
     },
     "roles": [
