@@ -1,6 +1,7 @@
 import css from './LabInfo.module.scss';
 import strings from '../../../myTools/strings.tsx';
 import { useLocation } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 const LabInfo = () => {
     const location = useLocation();
@@ -12,6 +13,8 @@ const LabInfo = () => {
     const month = date1.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
     const timecreation = date1.toLocaleTimeString("ru-RU", { hour: "numeric", minute: "numeric" });
     const formattedDate = `${week}, ${month}, ${timecreation}`;
+
+    const content = selectedRequest.content.split(' ');
 
     return <>
         <div className = {css.container}>
@@ -34,7 +37,16 @@ const LabInfo = () => {
                         <div className = {css.data}> {formattedDate }</div>
                     </div>
                 </div>
-                <div className = {css.box}>{selectedRequest.content}</div>
+                <div className = {css.box}>
+                <p>
+                    {content.map((item: string, index: number) => {
+                        if(item.includes('http')) {
+                            return <Link key={index} to={item}>{item}</Link>;
+                        } 
+                        return <span key={index}>{item}</span>;
+                    })}
+                </p>
+                </div>
                 <div className = {css.git}>
                     <div className = {css.text1}>
                         {strings.Percent}

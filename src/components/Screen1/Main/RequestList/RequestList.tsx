@@ -22,7 +22,7 @@ const RequestList = (props: {status: string}) => {
           qroupname: string,
           deadline: Date
         };
-        content: string;
+        content: URL;
         comments: string;
         variant: Int16Array;
         info: {};

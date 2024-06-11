@@ -3,7 +3,7 @@ const strings = {
     Statements: "Ведомости по лабораторным",
     Memo: "Памятка студентам",
     LaboratoryWorks: "Лабораторные работы",
-    K: "K",
+    K: "Ш",
     Subject: "ООАиП",
     Unverifid: "Непроверенные работы",
     Retake: "Повторная сдача",
@@ -29,7 +29,13 @@ const strings = {
     Comment: "Комментарии",
     Add: "добавить в отложенные",
     Data2: "пт, 13 дек., 22:43",
-    Task: "Задание"
+    Task: "Задание",
+    Avtorization: "Авторизация",
+    Subtitle: "Введите данные для входа в систему",
+    Login: "Логин",
+    Password: "Пароль",
+    Registration: "Регистрация",
+    Into: "Вход"
 };
 
 export default strings;
