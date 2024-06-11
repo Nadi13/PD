@@ -13,7 +13,7 @@ from sessions import SessionManager
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-data_provider: Type[db.DataProvider]
+data_provider: db.DataProvider
 sessionmanager: SessionManager
 
 def __initialize() -> None:
